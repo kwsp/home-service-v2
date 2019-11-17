@@ -2,14 +2,12 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
-
 // Area Chart Example
 //var dataset = {
 //    x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 //    y: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
 //    label: "Earnings",
 //}
-
 
 function areaPlot(id, xlabel, ydata, label) {
   var ctx = $("#"+id);
@@ -37,23 +35,27 @@ function areaPlot(id, xlabel, ydata, label) {
       maintainAspectRatio: false,
       layout: {
         padding: {
-          left: 5,
+          left: 2,
           right: 5,
           top: 10,
-          bottom: 0
+          bottom: -5 
         }
       },
       scales: {
         xAxes: [{
           type: 'time',
-          // time: {
-          //   displayFormats: {
-          //     'day': 'MMM DD HH'
-          //   }
-          // },
+          time: {
+            displayFormats: {
+              second: 'MMM YYYY'
+            }
+          },
           gridLines: {
-            display: false,
-            drawBorder: false
+            // color: "rgb(234, 236, 244)",
+            // zeroLineColor: "rgb(234, 236, 244)",
+            display: true,
+            drawBorder: true,
+            borderDash: [2],
+            zeroLineBorderDash: [2]
           },
           ticks: {
             fontColor: "rgb(234, 236, 244)",
@@ -65,13 +67,12 @@ function areaPlot(id, xlabel, ydata, label) {
             display: true,
             labelString: label,
             fontColor: "rgb(234, 236, 244)",
-            fontSize: 14
+            fontSize: 13
           },
           ticks: {
             maxTicksLimit: 5,
             padding: 10,
             fontColor: "rgb(234, 236, 244)",
-            // Include a dollar sign in the ticks
             callback: function(value, index, values) {
               return (value).toFixed(1);
             }
@@ -89,25 +90,23 @@ function areaPlot(id, xlabel, ydata, label) {
         display: false
       },
       tooltips: {
+        enabled: true,
         backgroundColor: "rgb(255,255,255)",
         bodyFontColor: "#858796",
-        titleMarginBottom: 10,
         titleFontColor: '#6e707e',
-        titleFontSize: 14,
         borderColor: '#dddfeb',
         borderWidth: 1,
-        xPadding: 15,
-        yPadding: 15,
+        xPadding: 10,
+        yPadding: 10,
         displayColors: false,
         intersect: false,
         mode: 'index',
-//        caretPadding: 10,
-        callbacks: {
-          label: function(tooltipItem, chart) {
-            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-            return datasetLabel + ': ' + tooltipItem.yLabel;
-          }
-        }
+        // callbacks: {
+        //   label: function(tooltipItem, chart) {
+        //     var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+        //     return datasetLabel + ': ' + tooltipItem.yLabel;
+        //   }
+        // }
       }
     }
   }); 
