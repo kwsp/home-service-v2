@@ -6,7 +6,7 @@ function get_data() {
     url: url,
     type: 'GET',
     async: true,
-    data: null,
+    data: {n: 300},
     success: (sensorData) => {
       // Update cards
       var len = sensorData.timestamp.length-1;
