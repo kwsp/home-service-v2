@@ -1,5 +1,3 @@
 #!/bin/bash
-
-cd /var/www/home-service
-
-/home/pi/.nvm/versions/node/v13.0.1/bin/node server.js
+cd home-service
+gunicorn -w 2 --bind=0.0.0.0:8777 app:app

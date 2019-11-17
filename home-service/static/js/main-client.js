@@ -12,15 +12,15 @@ function get_data() {
     success: (sensorData) => {
       cacheSensorData = sensorData;
       // Update cards
-      var len = sensorData.time.length-1;
+      var len = sensorData.timestamp.length-1;
       var str = sensorData.temperature[len] + " C"
       document.getElementById('temperatureStatus').innerHTML = str;
       var str = sensorData.activity[len];
       document.getElementById('activityStatus').innerHTML = str;
 
       // Update plots
-      areaPlot('graphTemperature', sensorData.time, sensorData.temperature, 'Temperature (°C)')
-      areaPlot('graphActivity', sensorData.time, sensorData.activity, 'Activity (count)')
+      areaPlot('graphTemperature', sensorData.timestamp, sensorData.temperature, 'Temperature (°C)')
+      areaPlot('graphActivity', sensorData.timestamp, sensorData.activity, 'Activity (count)')
     }
   })
 }

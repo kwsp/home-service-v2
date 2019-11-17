@@ -8,7 +8,7 @@ from flask.cli import with_appcontext
 # Get DB path
 db_name = "tiger-home.db"
 db_path = os.path.join(os.getcwd(),
-                       '/data',
+                       'data',
                        db_name)
 
 
