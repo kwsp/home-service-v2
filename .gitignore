@@ -1,7 +1,7 @@
 
-py/__pycache__/
+home-service/__pycache__/
 *.pyc
 
 
-node_modules/
-data/*.db
+flask/
+home-service/data/*.db

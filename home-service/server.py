@@ -25,7 +25,7 @@ class SensorData(Resource):
                 SELECT timestamp, temperature, activity FROM sensor_data
                 ORDER BY timestamp DESC LIMIT {}'''.format(n_points))
                 data = cursor.fetchall()
-                timestamp = [tup[0] for tup in data]
+                timestamp = [tup[0]*1000 for tup in data]
                 temperature = [tup[1] for tup in data]
                 activity = [tup[2] for tup in data]
                 cursor.close()
@@ -58,7 +58,7 @@ class PiTemp(Resource):
         names = set(v[0] for v in data)
         res = {}
         for name in names:
-            timestamp = [v[1] for v in data if v[0] == name]
+            timestamp = [v[1]*1000 for v in data if v[0] == name]
             temperature = [v[2] for v in data if v[0] == name]
             res[name] = {'timestamp': timestamp, 'temperature': temperature}
         return res
@@ -120,4 +120,4 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(port="8777", debug=True)
+    app.run(port="6969", debug=True)

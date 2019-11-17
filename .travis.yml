@@ -1,11 +1,10 @@
-language: node_js
-node_js:
-- 13
-env:
-- NODE_ENV=TEST
-before_script:
-- npm install
-
-cache:
-   directories:
-      - node_modules
+language: python3
+python:
+   - '3.5'
+   - '3.6'
+   - '3.7'
+install:
+   - pip install requirements.txt
+   - pip install pytest coverage
+scripts:
+   - ''
