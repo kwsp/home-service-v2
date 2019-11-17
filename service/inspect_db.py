@@ -19,7 +19,7 @@ res = c.fetchall()
 print("Latest pi_temp:")
 for r in res:
     t = datetime.fromtimestamp(r[1])
-    print("Name: ", r[0], "Time: ", t, " TempC: ", round(r[1], 2))
+    print("Name: ", r[0], "Time: ", t, " TempC: ", r[2])
 
 
 c.close()

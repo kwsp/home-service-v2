@@ -81,8 +81,12 @@ class PiTemp(Resource):
                 INSERT INTO pi_temp
                 VALUES (?,?,?)''', (name, timestamp, temperature))
                 cursor.close()
-        except sqlite3.OperationalError:
-            return {"error": "Querry failed"}
+        # except sqlite3.OperationalError:
+        except Exception as e:
+            return {"Exception Type": str(type(e)),
+                    "Args": str(e.args),
+                    "__str__": str(e.__str__)}
+            # return {"error": "Querry failed"}
 
         return {
             'status': True,
