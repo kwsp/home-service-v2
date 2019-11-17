@@ -100,7 +100,7 @@ def create_app():
     # Proxy support for NGINX
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    # Configure to see multiple erros in response
+    # Configure to see multiple errors in response
     app.config['BUNDLE_ERRORS'] = True
 
     @app.route('/')

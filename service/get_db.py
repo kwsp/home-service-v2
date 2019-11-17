@@ -7,10 +7,12 @@ from flask.cli import with_appcontext
 
 # Get DB path
 db_name = "tiger-home.db"
-db_path = os.path.join(os.getcwd(),
+
+db_path = os.path.join(os.path.dirname(__file__),
                        'data',
                        db_name)
 
+print(db_path)
 
 def db():
     # Create the DB
