@@ -145,7 +145,7 @@
               <div class="card mb-4" id="temperaturePlot">
                 <!-- Card Header -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-yellow">Room temperature in the past 24 hours</h6>
+                  <h6 class="m-0 font-weight-bold text-yellow">Room temperature</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body px-0 py-0.5">
@@ -161,7 +161,7 @@
               <div class="card mb-4" id="activityPlot">
                 <!-- Card Header -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-yellow">Activity in the past 24 hours</h6>
+                  <h6 class="m-0 font-weight-bold text-yellow">Activity</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body px-0 py-0.5">
@@ -176,7 +176,23 @@
 
           <!-- Content Row -->
           <div class="row">
-            
+
+            <!-- Pi Temp Chart -->
+            <div class="col-xl-8 col-lg-6">
+              <div class="card mb-4" id="temperaturePlot">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-yellow">Pi Server Temperature</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body px-0 py-0.5">
+                  <div class="chart-area">
+                    <canvas id="graphPiTemp"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Pie Chart -->
             <div class="col-xl-4 col-lg-6">
               <div class="card mb-4" id="pieCard">
@@ -192,7 +208,7 @@
                 </div>
               </div>
             </div>
-            
+
            <!-- Approach -->
             <div class="col-xl-8 col-lg-6">
               <div class="card mb-4">

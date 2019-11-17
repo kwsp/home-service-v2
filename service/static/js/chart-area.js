@@ -22,13 +22,6 @@ function areaPlot(id, xlabel, ydata, label) {
         backgroundColor: "rgba(78, 115, 223, 0.25)",
         borderColor: "rgba(78, 115, 223, 1)",
         pointRadius: 0,
-        // pointBackgroundColor: "rgba(78, 115, 223, 1)",
-        // pointBorderColor: "rgba(78, 115, 223, 1)",
-        // pointHoverRadius: 3,
-        // pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-        // pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-        // pointHitRadius: 10,
-        // pointBorderWidth: 2,
       }],
     },
     options: {
@@ -42,12 +35,26 @@ function areaPlot(id, xlabel, ydata, label) {
         }
       },
       scales: {
+        xAxes: [{}, {
+          id: 'x-axis-2',
+          type: 'linear',
+          position: 'bottom',
+          display: false,
+        }],
+        yAxes: [{
+          ticks: {
+            min: 0,
+            max: 50
+          }
+        }]
+      },
+      scales: {
         xAxes: [{
           type: 'time',
           time: {
             displayFormats: {
               second: 'MMM YYYY'
-            }
+            }, 
           },
           gridLines: {
             // color: "rgb(234, 236, 244)",
@@ -87,7 +94,106 @@ function areaPlot(id, xlabel, ydata, label) {
         }],
       },
       legend: {
-        display: false
+        display: false 
+      },
+      tooltips: {
+        enabled: 'nearest',
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        titleFontColor: '#6e707e',
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 10,
+        yPadding: 10,
+        displayColors: false,
+        intersect: false,
+        mode: 'index',
+        // callbacks: {
+        //   label: function(tooltipItem, chart) {
+        //     var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+        //     return datasetLabel + ': ' + tooltipItem.yLabel;
+        //   }
+        // }
+      }
+    }
+  }); 
+}
+
+function areaPlotMulti(id, xlabel, datasets, label) {
+  var ctx = $("#"+id);
+  var myLineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: xlabel,  
+      datasets: datasets,
+    },
+    options: {
+      maintainAspectRatio: false,
+      layout: {
+        padding: {
+          left: 2,
+          right: 5,
+          top: 10,
+          bottom: -5 
+        }
+      },
+      scales: {
+        xAxes: [{
+          type: 'time',
+          time: {
+            displayFormats: {
+              second: 'MMM YYYY'
+            }
+          },
+          gridLines: {
+            // color: "rgb(234, 236, 244)",
+            // zeroLineColor: "rgb(234, 236, 244)",
+            display: true,
+            drawBorder: true,
+            borderDash: [2],
+            zeroLineBorderDash: [2]
+          },
+          ticks: {
+            fontColor: "rgb(234, 236, 244)",
+          }
+        }, {
+            id: 'x-axis-2',
+            type: 'linear',
+            position: 'bottom',
+            display: false,
+          }, {
+            id: 'x-axis-3',
+            type: 'linear',
+            position: 'bottom',
+            display: false,
+          }],
+        
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: label,
+            fontColor: "rgb(234, 236, 244)",
+            fontSize: 13
+          },
+          ticks: {
+            maxTicksLimit: 5,
+            padding: 10,
+            fontColor: "rgb(234, 236, 244)",
+            callback: function(value, index, values) {
+              return (value).toFixed(1);
+            }
+          },
+          gridLines: {
+            color: "rgb(234, 236, 244)",
+            zeroLineColor: "rgb(234, 236, 244)",
+            drawBorder: false,
+            borderDash: [2],
+            zeroLineBorderDash: [2]
+          },
+        }],
+      },
+      legend: {
+        display: true 
       },
       tooltips: {
         enabled: true,
