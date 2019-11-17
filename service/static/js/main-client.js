@@ -56,6 +56,8 @@ function get_pi_temp() {
           data: piTemp[v],
           borderColor: chartColors[Object.keys(chartColors)[i]],
           showLine: true,
+          pointRadius: 0,
+          lineTension: 0.3
         });
       });
 

@@ -170,17 +170,16 @@ function areaPlotMulti(id, datasets, label) {
       tooltips: {
         backgroundColor: "rgb(255,255,255)",
         bodyFontColor: "#858796",
+        color: "#858796",
         titleFontColor: '#6e707e',
         borderColor: '#dddfeb',
         borderWidth: 1,
         xPadding: 10,
         yPadding: 10,
-        displayColors: false,
         intersect: false,
         mode: 'nearest',
         callbacks: {
           label: function(tooltipItem, chart) {
-            return "TEST";
             var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
             return datasetLabel + ': ' + tooltipItem.yLabel;
           }
