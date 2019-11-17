@@ -2,13 +2,13 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
-// Pie Chart Example
-var dataset = {
-    labels: ["JavaScript", "HTML", "Python", "CSS"],
-    data: [75.5, 11.1, 8.6, 4.8],
-    backgroundColor: ['#1cc88a', '#4e73df', '#36b9cc', '#f6c23e'],
-    hoverBackgroundColor: ['#17a673', '#2e59d9', '#2c9faf', '#DBAD23'],
-}
+// // Pie Chart Example
+// var dataset = {
+//     labels: ["JavaScript", "HTML", "Python", "CSS"],
+//     data: [75.5, 11.1, 8.6, 4.8],
+//     backgroundColor: ['#1cc88a', '#4e73df', '#36b9cc', '#f6c23e'],
+//     hoverBackgroundColor: ['#17a673', '#2e59d9', '#2c9faf', '#DBAD23'],
+// }
 
 var myPieChart=[];
 
@@ -49,4 +49,4 @@ function pieChart(id, dataset) {
   });
 }
 
-pieChart('myPieChart', dataset);
+// pieChart('myPieChart', dataset);
