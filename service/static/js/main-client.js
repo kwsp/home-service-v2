@@ -15,80 +15,52 @@ function get_data() {
       var str = sensorData.activity[len];
       document.getElementById('activityStatus').innerHTML = str;
 
-      timestamp = []
-      sensorData.timestamp.forEach(t => {
-        timestamp.push(moment.unix(t))
-        // .format('MM/DD/YY HH:mm'))
+      sensorData.timestamp.forEach(function(part, index, arr) {
+        arr[index] = moment.unix(part);
       })
 
       // Update plots
-      areaPlot('graphTemperature', timestamp, sensorData.temperature, 'Temperature (°C)')
-      areaPlot('graphActivity', timestamp, sensorData.activity, 'Activity (count)')
+      areaPlot('graphTemperature', sensorData.timestamp, sensorData.temperature, 'Temperature (°C)')
+      areaPlot('graphActivity', sensorData.timestamp, sensorData.activity, 'Activity (count)')
     }
   })
 }
 
+const serverNames = ['TigerPi', 'TigerPi4', 'TigerPiZeroW']
+
+chartColors = {
+  red: 'rgb(255, 99, 132)',
+  green: 'rgb(75, 192, 192)',
+  blue: 'rgb(54, 162, 235)',
+  orange: 'rgb(255, 159, 64)',
+  yellow: 'rgb(255, 205, 86)',
+  purple: 'rgb(153, 102, 255)',
+  grey: 'rgb(201, 203, 207)'
+};
+
 function get_pi_temp() {
-  let url = "/home_api/pi_temp";
+  let url = "home_api/pi_temp";
   $.ajax({
     url: url,
     type: 'GET',
     async: true,
     data: null,
     success: (piTemp) => {
-
-      timestamp = []
-      piTemp['TigerPi']['timestamp'].forEach(t => {
-        timestamp.push(moment.unix(t))
-      })
-      timestamp4 = []
-      piTemp['TigerPi4']['timestamp'].forEach(t => {
-        timestamp4.push(moment.unix(t))
-      })
-      timestampW = []
-      piTemp['TigerPiZeroW']['timestamp'].forEach(t => {
-        timestampW.push(moment.unix(t))
-      })
-
-
       datasets = []
-      datasets.push({
-        label: 'TigerPi',
-        data: piTemp['TigerPi']['temperature'],
-        backgroundColor: "rgba(78, 115, 223, 0.25)",
-        borderColor: "rgba(78, 115, 223, 1)",
-        lineTension: 0.3,
-        pointRadius: 0,
-      })
-      datasets.push({
-        type: 'line',
-        label: 'TigerPi4',
-        xAxisID: 'x-axis-2',
-        data: {
-          x: timestamp4,
-          y: piTemp['TigerPi4']['temperature']
-        },
-        backgroundColor: "rgba(78, 115, 223, 0.25)",
-        borderColor: "rgba(78, 115, 223, 1)",
-        lineTension: 0.3,
-        pointRadius: 0,
-      })
-      datasets.push({
-        type: 'line',
-        label: 'TigerPiZeroW',
-        xAxisID: 'x-axis-3',
-        data: {
-          x: timestampW,
-          y: piTemp['TigerPiZeroW']['temperature']
-        },
-        backgroundColor: "rgba(78, 115, 223, 0.25)",
-        borderColor: "rgba(78, 115, 223, 1)",
-        lineTension: 0.3,
-        pointRadius: 0,
-      })
+      Object.keys(piTemp).forEach(function (v, i) {
+        piTemp[v].forEach(function (part, index, arr) {
+          arr[index].x = moment.unix(arr[index].x);
+        });
+        datasets.push({
+          label: v,
+          data: piTemp[v],
+          borderColor: chartColors[Object.keys(chartColors)[i]],
+          showLine: true,
+        });
+      });
 
       // Update plots
-      areaPlot('graphPiTemp', timestamp, datasets, 'Temperature (°C)')
+      areaPlotMulti('graphPiTemp', datasets, 'Temperature (°C)')
     }
   })
 }

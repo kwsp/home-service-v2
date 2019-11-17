@@ -58,9 +58,12 @@ class PiTemp(Resource):
         names = set(v[0] for v in data)
         res = {}
         for name in names:
-            timestamp = [v[1] for v in data if v[0] == name]
-            temperature = [v[2] for v in data if v[0] == name]
-            res[name] = {'timestamp': timestamp, 'temperature': temperature}
+            res[name] = []
+        for v in data:
+            res[v[0]].append({
+                'x': v[1],
+                'y': v[2]
+            })
         return res
 
     def post(self):

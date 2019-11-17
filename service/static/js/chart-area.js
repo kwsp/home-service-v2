@@ -9,6 +9,8 @@ Chart.defaults.global.defaultFontColor = '#858796';
 //    label: "Earnings",
 //}
 
+charts = Object(); 
+
 function areaPlot(id, xlabel, ydata, label) {
   var ctx = $("#"+id);
   var myLineChart = new Chart(ctx, {
@@ -19,7 +21,7 @@ function areaPlot(id, xlabel, ydata, label) {
         data: ydata,
         label: label,
         lineTension: 0.3,
-        backgroundColor: "rgba(78, 115, 223, 0.25)",
+        // backgroundColor: "rgba(78, 115, 223, 0.25)",
         borderColor: "rgba(78, 115, 223, 1)",
         pointRadius: 0,
       }],
@@ -33,20 +35,6 @@ function areaPlot(id, xlabel, ydata, label) {
           top: 10,
           bottom: -5 
         }
-      },
-      scales: {
-        xAxes: [{}, {
-          id: 'x-axis-2',
-          type: 'linear',
-          position: 'bottom',
-          display: false,
-        }],
-        yAxes: [{
-          ticks: {
-            min: 0,
-            max: 50
-          }
-        }]
       },
       scales: {
         xAxes: [{
@@ -78,11 +66,11 @@ function areaPlot(id, xlabel, ydata, label) {
           },
           ticks: {
             maxTicksLimit: 5,
-            padding: 10,
+            // padding: 10,
             fontColor: "rgb(234, 236, 244)",
-            callback: function(value, index, values) {
-              return (value).toFixed(1);
-            }
+            // callback: function(value, index, values) {
+            //   return (value).toFixed(1);
+            // }
           },
           gridLines: {
             color: "rgb(234, 236, 244)",
@@ -97,7 +85,6 @@ function areaPlot(id, xlabel, ydata, label) {
         display: false 
       },
       tooltips: {
-        enabled: 'nearest',
         backgroundColor: "rgb(255,255,255)",
         bodyFontColor: "#858796",
         titleFontColor: '#6e707e',
@@ -117,16 +104,14 @@ function areaPlot(id, xlabel, ydata, label) {
       }
     }
   }); 
+  charts[id] = myLineChart;
 }
 
-function areaPlotMulti(id, xlabel, datasets, label) {
+function areaPlotMulti(id, datasets, label) {
   var ctx = $("#"+id);
   var myLineChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: xlabel,  
-      datasets: datasets,
-    },
+    type: 'scatter',
+    data: {datasets},
     options: {
       maintainAspectRatio: false,
       layout: {
@@ -156,17 +141,7 @@ function areaPlotMulti(id, xlabel, datasets, label) {
           ticks: {
             fontColor: "rgb(234, 236, 244)",
           }
-        }, {
-            id: 'x-axis-2',
-            type: 'linear',
-            position: 'bottom',
-            display: false,
-          }, {
-            id: 'x-axis-3',
-            type: 'linear',
-            position: 'bottom',
-            display: false,
-          }],
+        }],
         
         yAxes: [{
           scaleLabel: {
@@ -192,11 +167,7 @@ function areaPlotMulti(id, xlabel, datasets, label) {
           },
         }],
       },
-      legend: {
-        display: true 
-      },
       tooltips: {
-        enabled: true,
         backgroundColor: "rgb(255,255,255)",
         bodyFontColor: "#858796",
         titleFontColor: '#6e707e',
@@ -206,16 +177,18 @@ function areaPlotMulti(id, xlabel, datasets, label) {
         yPadding: 10,
         displayColors: false,
         intersect: false,
-        mode: 'index',
-        // callbacks: {
-        //   label: function(tooltipItem, chart) {
-        //     var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-        //     return datasetLabel + ': ' + tooltipItem.yLabel;
-        //   }
-        // }
+        mode: 'nearest',
+        callbacks: {
+          label: function(tooltipItem, chart) {
+            return "TEST";
+            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+            return datasetLabel + ': ' + tooltipItem.yLabel;
+          }
+        }
       }
     }
-  }); 
+  });
+  charts[id] = myLineChart;
 }
 
 //areaPlot("myAreaChart", dataset);
