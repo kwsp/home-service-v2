@@ -40,7 +40,6 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
 <link rel="shortcut icon" href="/static/favicon.ico">
 <!-- Custom fonts for this template-->
-<link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 <!-- Custom bootstrap styles for this template-->
 <link href="static/css/custom.min.css" rel="stylesheet">
@@ -77,9 +76,6 @@
                       <div class="text-s font-weight-bold text-primary text-uppercase mb-1 currentDate">Current Time</div>
                       <div class="h5 mb-0 font-weight-bold text-light" id="updateTime"></div>
                     </div>
-                    <div class="col-auto">
-                      <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -94,9 +90,6 @@
                     <div class="col mr-2">
                       <div class="text-s font-weight-bold text-success text-uppercase mb-1">Temperature</div>
                       <div class="h5 mb-0 font-weight-bold text-light" id="temperatureStatus"></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-atom fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -122,9 +115,6 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-auto">
-                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -139,9 +129,6 @@
                     <div class="col mr-2">
                       <div class="text-s font-weight-bold text-warning text-uppercase mb-1">Activity</div>
                       <div class="h5 mb-0 font-weight-bold text-light" id="activityStatus">0</div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-lightbulb fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -202,20 +189,6 @@
                   <div class="chart-pie pt-4 pb-2">
                     <canvas id="myPieChart"></canvas>
                   </div>
-                  <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> JavaScript
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> HTML
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> Python
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-warning"></i> CSS
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -237,16 +210,12 @@
                     an accelerometer to monitor activity (which, as you'd imagine, 
                     is basically a very good random number generator). 
                   </p>
-                  <!--<div class="text-center">-->
-                    <!--<img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="static/img/undraw_report_mx0a.svg" alt="">-->
-                  <!--</div>-->
                   <p class="mb-0">
                     The front end is built with <a href="https://getbootstrap.com">Bootstrap</a> and 
-                    <a href="https://jquery.com">jQuery</a> based on my modified version of the 
+                    <a href="https://jquery.com">jQuery</a> based on the 
                     <a href="https://github.com/haolinnie/startbootstrap-sb-admin-2">SB Admin 2</a> 
-                    theme. The backend is built with <a href="https://nodejs.org">Node.js</a> and 
-                    <a href="https://http://expressjs.com">Express</a>, while data is stored in a 
-                    <a href="https://www.sqlite.org">SQLite</a> database. The server is hosted with 
+                    theme. The backend is built with <a href="https://flask.palletsprojects.com/en/1.1.x/">Flask</a>
+                    , while data is stored in a <a href="https://www.sqlite.org">SQLite</a> database. The server is hosted with 
                     <a href="https://www.nginx.com">NGINX</a> on a <a href="https://www.raspberrypi.org/">
                        Raspberry Pi 3B+</a> in my bedroom, which also controls the sensors through an 
                     <a href="">Arduino</a>. In the future I will implement 
@@ -265,7 +234,7 @@
       <footer class="sticky-footer bg-custom">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span><i class="fas fa-laugh-beam"></i></span>
+            <span>Check this out</span>
           </div>
         </div>
       </footer>
@@ -283,17 +252,16 @@
   </a>
 
   <!-- Bootstrap core JavaScript-->
-  <script src="static/vendor/jquery/jquery.min.js"></script>
-  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="static/vendor/jquery.min.js"></script>
+  <!-- <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
 
   <!-- Core plugin JavaScript-->
-  <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="static/vendor/jquery.easing.min.js"></script>
 
   <!-- Custom scripts for all pages-->
-  <script src="static/js/sb-admin-2.min.js"></script>
+  <script src="static/js/sb-admin-2.js"></script>
 
   <!-- Page level plugins -->
-<!--  <script src="vendor/chart.js/Chart.min.js"></script>-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 

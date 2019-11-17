@@ -40,7 +40,9 @@ function pieChart(id, dataset) {
 //          caretPadding: 10,
       },
       legend: {
-        display: false
+        display: true,
+        position: 'bottom',
+        fullwidth: true
       },
       cutoutPercentage: 80,
     },
@@ -48,12 +50,3 @@ function pieChart(id, dataset) {
 }
 
 pieChart('myPieChart', dataset);
-
-$('#animate-pie').on('click', function() {
-  var val = myPieChart[0].config.cutoutPercentage;
-  myPieChart[0].config.cutoutPercentage = val;
-  myPieChart[0].update();
-});
-$('#animate-pie2').on('click', function() {
-  myPieChart[0].update();
-});
