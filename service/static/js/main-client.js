@@ -1,7 +1,7 @@
 // // Plots
 
 function get_data() {
-  let url = "/home_api/get_curr_data";
+  let url = "/home_api/sensor_data";
   $.ajax({
     url: url,
     type: 'GET',

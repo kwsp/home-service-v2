@@ -9,32 +9,54 @@ from get_db import get_db, execute_db, init_app
 
 parser = reqparse.RequestParser()
 parser.add_argument('n', type=int, help="ERROR: empty length of data")
+parser.add_argument('where', type=str, help="ERROR: empty table name")
 
 
 class SensorData(Resource):
     def get(self):
-        data = parser.parse_args()
-        n_points = data.get('n')
+        args = parser.parse_args()
+        n_points = args.get('n')
+        location = args.get('where')
         if n_points is None:
             n_points = 1000
+
+        try:
+            data = execute_db('''
+            SELECT timestamp, temperature, activity
+            FROM sensor_data ORDER BY timestamp DESC LIMIT {}
+            '''.format(n_points))
+
+            timestamp = [tup[0] for tup in data]
+            temperature = [tup[1] for tup in data]
+            activity = [tup[2] for tup in data]
+
+        except Exception as e:
+            return {"Exception Type": str(type(e)),
+                    "Args": str(e.args),
+                    "__str__": str(e.__str__)}
+
+        return {'timestamp': timestamp,
+                'temperature': temperature,
+                'activity': activity}
+
+    def post(self):
+        # TODO: Need to change database schema and test this endpoint
+        args = parser.parse_args()
+        location = args.get('where')
+        temperature = args.get('temperature')
+        timestamp = int(time.time())
 
         try:
             with get_db() as connection:
                 cursor = connection.cursor()
                 cursor.execute('''
-                SELECT timestamp, temperature, activity FROM sensor_data
-                ORDER BY timestamp DESC LIMIT {}'''.format(n_points))
-                data = cursor.fetchall()
-                timestamp = [tup[0] for tup in data]
-                temperature = [tup[1] for tup in data]
-                activity = [tup[2] for tup in data]
+                INSERT INTO ?
+                VALUES (?,?,?)''', (where, timestamp, temperature))
                 cursor.close()
-        except sqlite3.OperationalError:
-            return {"error": "Querry failed"}
-
-        return {'timestamp': timestamp,
-                'temperature': temperature,
-                'activity': activity}
+        except Exception as e:
+            return {"Exception Type": str(type(e)),
+                    "Args": str(e.args),
+                    "__str__": str(e.__str__)}
 
 
 class PiTemp(Resource):
@@ -52,8 +74,10 @@ class PiTemp(Resource):
                 ORDER BY timestamp DESC LIMIT {}'''.format(n_points))
                 data = cursor.fetchall()
                 cursor.close()
-        except sqlite3.OperationalError:
-            return {"error": "Querry failed"}
+        except Exception as e:
+            return {"Exception Type": str(type(e)),
+                    "Args": str(e.args),
+                    "__str__": str(e.__str__)}
 
         names = set(v[0] for v in data)
         res = {}
@@ -84,12 +108,10 @@ class PiTemp(Resource):
                 INSERT INTO pi_temp
                 VALUES (?,?,?)''', (name, timestamp, temperature))
                 cursor.close()
-        # except sqlite3.OperationalError:
         except Exception as e:
             return {"Exception Type": str(type(e)),
                     "Args": str(e.args),
                     "__str__": str(e.__str__)}
-            # return {"error": "Querry failed"}
 
         return {
             'status': True,
@@ -120,8 +142,9 @@ def create_app():
 
     # Flask_restful API
     api = Api(app)
-    api.add_resource(SensorData, '/home_api/get_curr_data')
+    api.add_resource(SensorData, '/home_api/sensor_data')
     api.add_resource(PiTemp, '/home_api/pi_temp')
+
     return app
 
 
