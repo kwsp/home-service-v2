@@ -4,6 +4,6 @@ home-service/__pycache__/
 
 
 flask/
-home-service/data/*.db
+service/data/*.db
 
 .coverage
