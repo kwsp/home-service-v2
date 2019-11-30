@@ -9,86 +9,96 @@ from get_db import get_db, execute_db, init_app
 
 parser = reqparse.RequestParser()
 parser.add_argument('n', type=int, help="ERROR: empty length of data")
-parser.add_argument('where', type=str, help="ERROR: empty table name")
+parser.add_argument('name', action='append', type=str)
+parser.add_argument('temperature', type=float)
 
 
-class SensorData(Resource):
+def insert_name_temperature(table_name, name, temperature):
+    timestamp = int(time.time())
+    try:
+        with get_db() as connection:
+            cursor = connection.cursor()
+            cursor.execute('''
+            INSERT INTO {}
+            VALUES (?,?,?)'''.format(table_name),
+                           (name[0], timestamp, temperature))
+            cursor.close()
+    except Exception as e:
+        return {"Exception Type": str(type(e)),
+                "Args": str(e.args),
+                "__str__": str(e.__str__)}
+    return {
+        'status': True,
+        'name': name,
+        'temperature': temperature
+    }
+
+
+def select_names_npoints(table_name, names, n_points):
+    try:
+        if names is None:
+            data = execute_db('''
+            SELECT name, timestamp, temperature
+            FROM {}
+            ORDER BY timestamp
+            DESC LIMIT {}'''.format(table_name, n_points))
+        else:
+            nm = "'" + "', '".join(names) + "'"
+            data = execute_db('''
+            SELECT name, timestamp, temperature
+            FROM {}
+            WHERE name in ({})
+            ORDER BY timestamp DESC LIMIT {}
+            '''.format(table_name, nm, n_points))
+    except Exception as e:
+        return {"Exception Type": str(type(e)),
+                "Args": str(e.args),
+                "__str__": str(e.__str__)}
+
+    names = set(v[0] for v in data)
+    res = {}
+    for name in names:
+        res[name] = []
+    for v in data:
+        res[v[0]].append({
+            'x': v[1],
+            'y': v[2]
+        })
+    return res
+
+
+class SensorTemp(Resource):
     def get(self):
         args = parser.parse_args()
         n_points = args.get('n')
-        location = args.get('where')
+        names = args.get('name')
+
         if n_points is None:
             n_points = 1000
 
-        try:
-            data = execute_db('''
-            SELECT timestamp, temperature, activity
-            FROM sensor_data ORDER BY timestamp DESC LIMIT {}
-            '''.format(n_points))
-
-            timestamp = [tup[0] for tup in data]
-            temperature = [tup[1] for tup in data]
-            activity = [tup[2] for tup in data]
-
-        except Exception as e:
-            return {"Exception Type": str(type(e)),
-                    "Args": str(e.args),
-                    "__str__": str(e.__str__)}
-
-        return {'timestamp': timestamp,
-                'temperature': temperature,
-                'activity': activity}
+        return select_names_npoints('sensor_temp', names, n_points)
 
     def post(self):
-        # TODO: Need to change database schema and test this endpoint
         args = parser.parse_args()
-        location = args.get('where')
-        temperature = args.get('temperature')
-        timestamp = int(time.time())
+        name = args["name"]
+        temperature = args["temperature"]
 
-        try:
-            with get_db() as connection:
-                cursor = connection.cursor()
-                cursor.execute('''
-                INSERT INTO ?
-                VALUES (?,?,?)''', (where, timestamp, temperature))
-                cursor.close()
-        except Exception as e:
-            return {"Exception Type": str(type(e)),
-                    "Args": str(e.args),
-                    "__str__": str(e.__str__)}
+        if name is None or temperature is None:
+            return {"error": "Missing arguments"}
+
+        return insert_name_temperature('sensor_temp', name, temperature)
 
 
 class PiTemp(Resource):
     def get(self):
-        data = parser.parse_args()
-        n_points = data.get('n')
+        args = parser.parse_args()
+        n_points = args.get('n')
+        names = args.get('name')
+
         if n_points is None:
             n_points = 1000
 
-        try:
-            with get_db() as connection:
-                cursor = connection.cursor()
-                cursor.execute('''
-                SELECT name, timestamp, temperature FROM pi_temp
-                ORDER BY timestamp DESC LIMIT {}'''.format(n_points))
-                data = cursor.fetchall()
-                cursor.close()
-        except Exception as e:
-            return {"Exception Type": str(type(e)),
-                    "Args": str(e.args),
-                    "__str__": str(e.__str__)}
-
-        names = set(v[0] for v in data)
-        res = {}
-        for name in names:
-            res[name] = []
-        for v in data:
-            res[v[0]].append({
-                'x': v[1],
-                'y': v[2]
-            })
-        return res
+        return select_names_npoints('pi_temp', names, n_points)
 
     def post(self):
         parser.add_argument('name', type=str)
@@ -101,23 +111,14 @@ class PiTemp(Resource):
         if name is None or temperature is None:
             return {"error": "Missing arguments"}
 
-        try:
-            with get_db() as connection:
-                cursor = connection.cursor()
-                cursor.execute('''
-                INSERT INTO pi_temp
-                VALUES (?,?,?)''', (name, timestamp, temperature))
-                cursor.close()
-        except Exception as e:
-            return {"Exception Type": str(type(e)),
-                    "Args": str(e.args),
-                    "__str__": str(e.__str__)}
+        return insert_name_temperature('pi_temp', name, temperature)
 
-        return {
-            'status': True,
-            'name': args['name'],
-            'temperature': args['temperature']
-        }
+
+class GitPull(Resource):
+    def get(self, repo_name):
+        if repo_name == "tigernie_website":
+            res = os.popen("cd /var/www/tigernie-website && git pull").readline().strip()
+            return jsonify({"status": res})
 
 
 def create_app():
@@ -135,6 +136,9 @@ def create_app():
     @app.route('/')
     def index():
         return render_template('index.html')
+    @app.route('/debug')
+    def debug():
+        return render_template('debug.html')
 
     @app.errorhandler(404)
     def not_found(error):
@@ -142,8 +146,9 @@ def create_app():
 
     # Flask_restful API
     api = Api(app)
-    api.add_resource(SensorData, '/home_api/sensor_data')
+    api.add_resource(SensorTemp, '/home_api/sensor_temp')
     api.add_resource(PiTemp, '/home_api/pi_temp')
+    api.add_resource(GitPull, '/home_api/gitpull/<string:repo_name>', endpoint='gitpull')
 
     return app
 

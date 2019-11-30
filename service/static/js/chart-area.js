@@ -154,9 +154,9 @@ function areaPlotMulti(id, datasets, label) {
             maxTicksLimit: 5,
             padding: 10,
             fontColor: "rgb(234, 236, 244)",
-            callback: function(value, index, values) {
-              return (value).toFixed(1);
-            }
+            // callback: function(value, index, values) {
+            //   return (value).toFixed(1);
+            // }
           },
           gridLines: {
             color: "rgb(234, 236, 244)",
@@ -170,18 +170,21 @@ function areaPlotMulti(id, datasets, label) {
       tooltips: {
         backgroundColor: "rgb(255,255,255)",
         bodyFontColor: "#858796",
-        color: "#858796",
+        //color: "#858796",
         titleFontColor: '#6e707e',
-        borderColor: '#dddfeb',
+        //borderColor: '#dddfeb',
         borderWidth: 1,
         xPadding: 10,
         yPadding: 10,
         intersect: false,
         mode: 'nearest',
         callbacks: {
-          label: function(tooltipItem, chart) {
-            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-            return datasetLabel + ': ' + tooltipItem.yLabel;
+           title: function(tooltipItem, chart){
+              return tooltipItem[0].xLabel.format('DD/MM/YYYY HH:mm:ss');
+           },
+           label: function(tooltipItem, chart) {
+             var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+             return ' '+datasetLabel + ': ' + tooltipItem.yLabel;
           }
         }
       }
