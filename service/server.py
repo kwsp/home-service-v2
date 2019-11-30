@@ -148,7 +148,7 @@ def create_app():
     api = Api(app)
     api.add_resource(SensorTemp, '/home_api/sensor_temp')
     api.add_resource(PiTemp, '/home_api/pi_temp')
-    api.add_resource(GitPull, '/home_api/gitpull/<string:repo_name>', endpoint='gitpull')
+    api.add_resource(GitPull, '/home_api/gitpull/<string:repo_name>')
 
     return app
 

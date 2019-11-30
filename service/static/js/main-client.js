@@ -46,9 +46,9 @@ function updateCard() {
     url: 'home_api/sensor_temp',
     type: 'GET',
     async: true,
-    data: {name: 'bedroom', n: 1},
+    data: {n: 1},
     success: (returnJSON) => {
-      document.getElementById('temperatureStatus').innerHTML = returnJSON.bedroom[0].y;
+      document.getElementById('temperatureStatus').innerHTML = returnJSON.b[0].y;
     }
   })
 
