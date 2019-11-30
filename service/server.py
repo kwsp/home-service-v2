@@ -21,7 +21,7 @@ def insert_name_temperature(table_name, name, temperature):
             cursor.execute('''
             INSERT INTO {}
             VALUES (?,?,?)'''.format(table_name),
-                           (name[0], timestamp, temperature))
+                           (name, timestamp, temperature))
             cursor.close()
     except Exception as e:
         return {"Exception Type": str(type(e)),
