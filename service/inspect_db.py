@@ -21,6 +21,14 @@ for r in res:
     t = datetime.fromtimestamp(r[1])
     print("Name: ", r[0], "Time: ", t, " TempC: ", r[2])
 
+c.execute("SELECT * FROM sensor_temp ORDER BY timestamp DESC LIMIT 10")
+res = c.fetchall()
+print("Latest sensor_temp:")
+breakpoint()
+for r in res:
+    t = datetime.fromtimestamp(r[1])
+    print("Name: ", r[0], "Time: ", t, " TempC: ", r[2])
+
 
 c.close()
 connection.close()
