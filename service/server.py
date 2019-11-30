@@ -136,6 +136,7 @@ def create_app():
     @app.route('/')
     def index():
         return render_template('index.html')
+
     @app.route('/debug')
     def debug():
         return render_template('debug.html')
