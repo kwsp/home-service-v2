@@ -42,10 +42,14 @@ function pieChart(id, dataset) {
       legend: {
         display: true,
         position: 'bottom',
-        fullwidth: true
+        fullwidth: false
       },
       cutoutPercentage: 80,
     },
+    tooltips: {
+       xPadding: 10,
+       yPadding: 10
+    }
   });
 }
 

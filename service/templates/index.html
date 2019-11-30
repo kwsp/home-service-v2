@@ -54,7 +54,7 @@
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-dark bg-- topbar mb-3 static-top">
           <!-- Icon -->
-          <a class="d-flex align-items-center justify-content-center text-light text-strong text-lg" href="index.html">
+          <a class="d-flex align-items-center justify-content-center text-light text-strong text-lg" href="https://tigernie.com">
             <div class="h3 mb-0 mx-3">Tiger IoT <span class="text-yellow">Dashboard</span></div>
           </a>
           <a class="d-flex mr-3 text-light text-strong text-lg ml-auto" href="https://tigernie.com">
@@ -140,6 +140,43 @@
           <!-- Content Row -->
           <div class="row">
 
+            <!-- Pi Temp Chart -->
+            <div class="col-lg-8">
+              <div class="card mb-4" id="temperaturePlot">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-yellow">Pi Temperature</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body px-0 py-0.5">
+                  <div class="chart-area">
+                    <canvas id="graphPiTemp"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="col-lg-4">
+              <div class="card mb-4" id="pieCard">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-yellow">Language Breakdown</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body px-0 py-0.5">
+                  <div class="chart-pie pt-4 pb-2">
+                    <canvas id="myPieChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Content Row -->
+          <div class="row">
+
             <!-- Temperature Chart -->
             <div class="col-lg-6">
               <div class="card mb-4" id="temperaturePlot">
@@ -156,61 +193,8 @@
               </div>
             </div>
               
-            <!-- Activity Chart -->
-            <div class="col-lg-6">
-              <div class="card mb-4" id="activityPlot">
-                <!-- Card Header -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-yellow">Activity</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body px-0 py-0.5">
-                  <div class="chart-area">
-                    <canvas id="graphActivity"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Content Row -->
-          <div class="row">
-
-            <!-- Pi Temp Chart -->
-            <div class="col-xl-8 col-lg-6">
-              <div class="card mb-4" id="temperaturePlot">
-                <!-- Card Header -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-yellow">Pi Server Temperature</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body px-0 py-0.5">
-                  <div class="chart-area">
-                    <canvas id="graphPiTemp"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Pie Chart -->
-            <div class="col-xl-4 col-lg-6">
-              <div class="card mb-4" id="pieCard">
-                <!-- Card Header -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-yellow">Language Breakdown</h6>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                  <div class="chart-pie pt-4 pb-2">
-                    <canvas id="myPieChart"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-
            <!-- Approach -->
-            <div class="col-xl-8 col-lg-6">
+            <div class="col-lg-6">
               <div class="card mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-yellow">Development Approach</h6>
