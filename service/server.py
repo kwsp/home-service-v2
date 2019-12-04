@@ -1,4 +1,5 @@
 import time
+import datetime
 import sqlite3
 from flask import Flask, jsonify
 from flask import make_response, render_template
@@ -35,21 +36,29 @@ def insert_name_temperature(table_name, name, temperature):
 
 
 def select_names_npoints(table_name, names, n_points):
-    try:
-        if names is None:
-            data = execute_db('''
-            SELECT name, timestamp, temperature
-            FROM {}
-            ORDER BY timestamp
-            DESC LIMIT {}'''.format(table_name, n_points))
+    ''' If n_points is None, select data from the last day.
+        If names is None, select all.
+    '''
+    cmd = '''SELECT name, timestamp, temperature FROM {} '''.format(table_name)
+
+    if names is not None:
+        nm = "'" + "', '".join(names) + "'"
+        cmd += ''' WHERE name in ({})
+        '''.format(nm)
+
+    if n_points is None:
+        if 'WHERE' in cmd:
+            cmd += 'AND'
         else:
-            nm = "'" + "', '".join(names) + "'"
-            data = execute_db('''
-            SELECT name, timestamp, temperature
-            FROM {}
-            WHERE name in ({})
-            ORDER BY timestamp DESC LIMIT {}
-            '''.format(table_name, nm, n_points))
+            cmd += 'WHERE'
+        cmd += ''' timestamp BETWEEN {} AND {}'''.format(
+                int((datetime.datetime.now()-datetime.timedelta(days=1)).timestamp()),
+                int(datetime.datetime.now().timestamp()))
+        n_points = 2000
+
+    cmd += ''' ORDER BY timestamp DESC LIMIT {} '''.format(n_points)
+    try:
+        data = execute_db(cmd)
     except Exception as e:
         return {"Exception Type": str(type(e)),
                 "Args": str(e.args),
@@ -73,9 +82,6 @@ class SensorTemp(Resource):
         n_points = args.get('n')
         names = args.get('name')
 
-        if n_points is None:
-            n_points = 1000
-
         return select_names_npoints('sensor_temp', names, n_points)
 
     def post(self):
@@ -94,9 +100,6 @@ class PiTemp(Resource):
         args = parser.parse_args()
         n_points = args.get('n')
         names = args.get('name')
-
-        if n_points is None:
-            n_points = 1000
 
         return select_names_npoints('pi_temp', names, n_points)
 
