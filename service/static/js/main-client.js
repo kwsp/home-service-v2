@@ -48,7 +48,7 @@ function updateCard() {
     async: true,
     data: {names: 'bedroom', n: 1},
     success: (returnJSON) => {
-      document.getElementById('temperatureStatus').innerHTML = returnJSON.bedroom[0].y;
+      document.getElementById('temperatureStatus').innerHTML = returnJSON.bedroom[0].y + 'C';
     }
   })
 
@@ -58,7 +58,7 @@ function updateCard() {
     async: true,
     data: {names: 'laundry_closet', n: 1},
     success: (returnJSON) => {
-      document.getElementById('humidityStatus').innerHTML = returnJSON.laundry_closet[0].y;
+      document.getElementById('humidityStatus').innerHTML = returnJSON.laundry_closet[0].y + '%';
     }
   })
 
