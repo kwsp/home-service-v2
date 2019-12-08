@@ -58,7 +58,7 @@ function updateCard() {
     async: true,
     data: {names: 'laundry_closet', n: 1},
     success: (returnJSON) => {
-      document.getElementById('temperatureStatus').innerHTML = returnJSON.laundry_closet[0].y;
+      document.getElementById('humidityStatus').innerHTML = returnJSON.laundry_closet[0].y;
     }
   })
 
