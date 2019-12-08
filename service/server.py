@@ -10,19 +10,27 @@ from get_db import get_db, execute_db, init_app
 
 parser = reqparse.RequestParser()
 parser.add_argument('n', type=int, help="ERROR: empty length of data")
-parser.add_argument('name', action='append', type=str)
+# For POST requests, only one name
+parser.add_argument('name', type=str)
+# For GET requests, can have multiple names
+parser.add_argument('names', action='append', type=str)
 parser.add_argument('temperature', type=float)
+parser.add_argument('humidity', type=float)
 
 
-def insert_name_temperature(table_name, name, temperature):
+def insert_name_temperature(table_name, name, data):
     timestamp = int(time.time())
+    if 'humidity' in table_name:
+        var = 'humidity'
+    else:
+        var = 'temperature'
     try:
         with get_db() as connection:
             cursor = connection.cursor()
             cursor.execute('''
             INSERT INTO {}
             VALUES (?,?,?)'''.format(table_name),
-                           (name, timestamp, temperature))
+                           (name, timestamp, data))
             cursor.close()
     except Exception as e:
         return {"Exception Type": str(type(e)),
@@ -31,7 +39,7 @@ def insert_name_temperature(table_name, name, temperature):
     return {
         'status': True,
         'name': name,
-        'temperature': temperature
+        var: data 
     }
 
 
@@ -85,7 +93,7 @@ class SensorTemp(Resource):
     def get(self):
         args = parser.parse_args()
         n_points = args.get('n')
-        names = args.get('name')
+        names = args.get('names')
 
         return select_names_npoints('sensor_temp', names, n_points)
 
@@ -103,7 +111,7 @@ class SensorHumidity(Resource):
     def get(self):
         args = parser.parse_args()
         n_points = args.get('n')
-        names = args.get('name')
+        names = args.get('names')
 
         return select_names_npoints('sensor_humidity', names, n_points)
 
@@ -122,7 +130,7 @@ class PiTemp(Resource):
     def get(self):
         args = parser.parse_args()
         n_points = args.get('n')
-        names = args.get('name')
+        names = args.get('names')
 
         return select_names_npoints('pi_temp', names, n_points)
 
