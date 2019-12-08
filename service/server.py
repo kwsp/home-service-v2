@@ -39,7 +39,12 @@ def select_names_npoints(table_name, names, n_points):
     ''' If n_points is None, select data from the last day.
         If names is None, select all.
     '''
-    cmd = '''SELECT name, timestamp, temperature FROM {} '''.format(table_name)
+    if 'humidity' in table_name:
+        var = 'humidity'
+    else:
+        var = 'temperature'
+
+    cmd = '''SELECT name, timestamp, {} FROM {} '''.format(var, table_name)
 
     if names is not None:
         nm = "'" + "', '".join(names) + "'"
@@ -93,6 +98,24 @@ class SensorTemp(Resource):
             return {"error": "Missing arguments"}
 
         return insert_name_temperature('sensor_temp', name, temperature)
+
+class SensorHumidity(Resource):
+    def get(self):
+        args = parser.parse_args()
+        n_points = args.get('n')
+        names = args.get('name')
+
+        return select_names_npoints('sensor_humidity', names, n_points)
+
+    def post(self):
+        args = parser.parse_args()
+        name = args["name"]
+        humidity = args["humidity"]
+
+        if name is None or humidity is None:
+            return {"error": "Missing arguments"}
+
+        return insert_name_temperature('sensor_humidity', name, humidity)
 
 
 class PiTemp(Resource):
@@ -151,6 +174,7 @@ def create_app():
     # Flask_restful API
     api = Api(app)
     api.add_resource(SensorTemp, '/home_api/sensor_temp')
+    api.add_resource(SensorHumidity, '/home_api/sensor_humidity')
     api.add_resource(PiTemp, '/home_api/pi_temp')
     api.add_resource(GitPull, '/home_api/gitpull/<string:repo_name>')
 
