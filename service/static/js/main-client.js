@@ -52,9 +52,19 @@ function updateCard() {
     }
   })
 
+  $.ajax({
+    url: 'home_api/sensor_humidity',
+    type: 'GET',
+    async: true,
+    data: {names: 'laundry_closet', n: 1},
+    success: (returnJSON) => {
+      document.getElementById('temperatureStatus').innerHTML = returnJSON.bedroom[0].y;
+    }
+  })
+
 }
 
-function getNameTempFromURL(url, data, plotname) {
+function getPlotDataFromURL(url, data, plotname, yLabel, colourSeed) {
   $.ajax({
     url: url,
     type: 'GET',
@@ -69,14 +79,14 @@ function getNameTempFromURL(url, data, plotname) {
         datasets.push({
           label: v,
           data: returnJSON[v],
-          borderColor: chartColors[Object.keys(chartColors)[i]],
+          borderColor: chartColors[Object.keys(chartColors)[i+colourSeed]],
           showLine: true,
           pointRadius: 0,
           lineTension: 0.3
         });
       });
       // Update plots
-      areaPlotMulti(plotname, datasets, 'Temperature (°C)')
+      areaPlotMulti(plotname, datasets, yLabel)
     }
   })
 }
@@ -101,15 +111,26 @@ function get_language() {
 $(function() {
   "use strict";
   updateCard()
-  getNameTempFromURL(
+  getPlotDataFromURL(
     "home_api/pi_temp",
     null,
-    'graphPiTemp'
+    'graphPiTemp',
+    'Temperature (°C)',
+    0
   )
-  getNameTempFromURL(
+  getPlotDataFromURL(
     "home_api/sensor_temp",
     {n: 300},
-    'graphTemperature'
+    'graphTemperature',
+    'Temperature (°C)',
+    0
+  )
+  getPlotDataFromURL(
+    "home_api/sensor_humidity",
+    null,
+    'graphHumidity',
+    'Humidity (%)',
+    2
   )
 
   get_language();
