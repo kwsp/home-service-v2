@@ -1,0 +1,9 @@
+[run]
+omit=
+    *flask*
+    *tests*
+
+[report]
+omit=
+    *flask*
+    *tests*

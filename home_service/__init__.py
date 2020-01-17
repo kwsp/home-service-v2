@@ -6,7 +6,7 @@ from flask import make_response, render_template
 from flask_restful import Resource, Api, reqparse
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from get_db import get_db, execute_db, init_app
+from home_service.get_db import get_db, execute_db, init_app
 
 parser = reqparse.RequestParser()
 parser.add_argument('n', type=int, help="ERROR: empty length of data")

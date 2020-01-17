@@ -1,10 +1,5 @@
-import os
-import tempfile
-
-import sys
 import pytest
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from server import create_app
+from home_service import create_app
 
 
 @pytest.fixture
