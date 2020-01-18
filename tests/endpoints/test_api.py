@@ -1,5 +1,4 @@
 
-
 def test_sensor_data(client):
     res = client.get('/home_api/sensor_temp')
     assert res.status_code == 200
