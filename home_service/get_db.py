@@ -2,7 +2,6 @@ import os
 import sqlite3
 
 from flask import g
-from flask.cli import with_appcontext
 
 
 # Get DB path

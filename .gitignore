@@ -6,3 +6,5 @@ flask/
 service/data/*.db
 
 .coverage
+
+tags

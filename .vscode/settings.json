@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "flask/bin/python3.8",
+    "vim.neovimPath": "/usr/local/bin/nvim",
+    "vim.enableNeovim": true
+}
