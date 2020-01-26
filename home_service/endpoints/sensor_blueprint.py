@@ -1,157 +1,99 @@
+"""
+Sensor data endpoints
+
+Get request:
+    Args:
+        names: <list> of device names. Defaults to all devices.
+        begin: <datetime> begining date. Defaults to one day ago.
+        end: <datetime> end date. Defaults to now.
+
+    Returns:
+        result: list of objects containing {"device_name", "timestamp", "value"}
+
+Post request:
+    Args: (Table inferred from endpoint url)
+        name: device name. Must provide.
+        value: reading value. Must provide.
+"""
 import time
+import json
 import datetime
 from flask import jsonify, Blueprint, request
 
+from home_service.core import create_response
 from home_service.get_db import get_db, execute_db
-from home_service.models.base import db
-from home_service.models import server_temp, room_temp, room_humidity
+from home_service.models import db, ServerTemp, RoomTemp, RoomHumidity
 
 
 sensor_blueprint = Blueprint("sensor_blueprint", __name__)
 
 
-def insert_name_temperature(table_name, name, data):
-    timestamp = int(time.time())
-    if "humidity" in table_name:
-        var = "humidity"
-    else:
-        var = "temperature"
-    try:
-        with get_db() as connection:
-            cursor = connection.cursor()
-            cursor.execute(
-                """
-            INSERT INTO {}
-            VALUES (?,?,?)""".format(
-                    table_name
-                ),
-                (name, timestamp, data),
-            )
-            cursor.close()
-    except Exception as e:
-        return (
-            {
-                "Exception Type": str(type(e)),
-                "Args": str(e.args),
-                "__str__": str(e.__str__),
-            },
-            420,
-        )
-    return {"status": True, "name": name, var: data}
-
-
-def select_names_npoints(table_name, names, n_points):
-    """ If n_points is None, select data from the last day.
-        If names is None, select all.
+def _sensor_data_get(Table, args):
+    """Helper function to get data from the sensor tables
     """
-    if "humidity" in table_name:
-        var = "humidity"
-    else:
-        var = "temperature"
 
-    cmd = """SELECT name, timestamp, {} FROM {} """.format(var, table_name)
+    qry = Table.query.order_by(Table.time.desc())
 
-    if names is not None:
-        nm = "'" + "', '".join(names) + "'"
-        cmd += """ WHERE name in ({})
-        """.format(
-            nm
-        )
+    if "names" in args:
+        qry = qry.filter(Table.name.in_(request.args["names"]))
 
-    if n_points is None:
-        if "WHERE" in cmd:
-            cmd += "AND"
-        else:
-            cmd += "WHERE"
-        cmd += """ timestamp BETWEEN {} AND {}""".format(
-            int((datetime.datetime.now() - datetime.timedelta(days=1)).timestamp()),
-            int(datetime.datetime.now().timestamp()),
-        )
-        n_points = 2000
+    end_date = datetime.datetime.now()
+    begin_date = end_date - datetime.timedelta(days=1)
 
-    cmd += """ ORDER BY timestamp DESC LIMIT {} """.format(n_points)
-    try:
-        data = execute_db(cmd)
-    except Exception as e:
-        return {
-            "Exception Type": str(type(e)),
-            "Args": str(e.args),
-            "__str__": str(e.__str__),
-        }
+    ## Need to test how to send this from JS
+    if "begin" in args:
+        begin_date = request.args["begin"]
+    if "end" in args:
+        end_date = request.args["end"]
 
-    names = set(v[0] for v in data)
-    res = {}
-    for name in names:
-        res[name] = []
-    for v in data:
-        res[v[0]].append({"x": v[1], "y": v[2]})
-    return res
+    qry = qry.filter(begin_date < Table.time).filter(Table.time < end_date)
+    res = [v.to_dict() for v in qry.all()]
+
+    return create_response(data=res)
+
+
+def _sensor_data_post(Table, args):
+    """Helper function to add data to the sensor tables
+    """
+    if "name" not in args or "value" not in args:
+        return create_response(message="Missing arguments", status=420)
+
+    new_data_pt = Table(
+        name=args["name"], time=datetime.datetime.now(), value=args["value"]
+    )
+    db.session.add(new_data_pt)
+    db.session.commit()
+    return create_response(message="Successfully posted")
 
 
 @sensor_blueprint.route("/home_api/room_temp", methods=["GET"])
-def room_temp_get():
-    n_points = request.args["n"]
-    name = request.args["names"]
-    return select_names_npoints("room_temp", names, n_points)
+def RoomTemp_get():
+    return _sensor_data_get(RoomTemp, request.args)
 
 
 @sensor_blueprint.route("/home_api/room_temp", methods=["POST"])
-def room_temp_post():
-    name = request.args["names"]
-    temperature = request.args["temperature"]
-
-    if name is None or temperature is None:
-        return {"error": "Missing arguments"}, 420
-
-    return insert_name_temperature("room_temp", name, temperature)
+def RoomTemp_post():
+    return _sensor_data_post(RoomTemp, json.loads(request.data))
 
 
 @sensor_blueprint.route("/home_api/room_humidity", methods=["GET"])
-def room_humidity_get():
-    name = request.args["names"]
-    n_points = request.args["n"]
-    return select_names_npoints("room_humidity", names, n_points)
+def RoomHumidity_get():
+    return _sensor_data_get(RoomHumidity, request.args)
 
 
 @sensor_blueprint.route("/home_api/room_humidity", methods=["POST"])
-def room_humidity_post():
-    name = request.args["names"]
-    humidity = request.args["humidity"]
-
-    if name is None or humidity is None:
-        return {"error": "Missing arguments"}, 420
-
-    return insert_name_temperature("room_humidity", name, humidity)
+def RoomHumidity_post():
+    return _sensor_data_post(RoomHumidity, json.loads(request.data))
 
 
 @sensor_blueprint.route("/home_api/server_temp", methods=["GET"])
-def server_temp_get():
-    breakpoint()
-    if not "names" in request.args:
-        return {"error": "Missing arguments"}, 420
-
-    if not "n" in request.args:
-        return {"error": "Missing arguments"}, 420
-
-    name = request.args["names"]
-    n_points = request.args["n"]
-
-    return select_names_npoints("server_temp", names, n_points)
+def ServerTemp_get():
+    return _sensor_data_get(ServerTemp, request.args)
 
 
 @sensor_blueprint.route("/home_api/server_temp", methods=["POST"])
-def server_temp_post():
-    if not "names" in request.args:
-        return {"error": "Missing arguments"}, 420
-
-    if not "temperature" in request.args:
-        return {"error": "Missing arguments"}, 420
-
-    name = request.args["names"]
-    temperature = request.args["temperature"]
-    timestamp = int(time.time())
-
-    return insert_name_temperature("server_temp", name, temperature)
+def ServerTemp_post():
+    return _sensor_data_post(ServerTemp, json.loads(request.data))
 
 
 # @sensor_blueprint.route("/home_api/gitpull", methods=["GET"])

@@ -10,21 +10,6 @@ from flask import jsonify
 from flask.wrappers import Response
 
 
-class Mixin:
-    """Base class for SQLAlchemy Models
-    """
-
-    def to_dict(self) -> dict:
-        """Method to serialise SQLAlchemy response for JSON
-
-        :returns <dict>
-        """
-        d_out = dict((key, val) for key, val in self.__dict__.items())
-        d_out.pop("_sa_instance_state", None)
-        d_out["_id"] = d_out.pop("id", None)  # rename id key to interface with response
-        return d_out
-
-
 def create_response(
     data: dict = None, status: int = 200, message: str = ""
 ) -> Tuple[Response, int]:
@@ -40,8 +25,8 @@ def create_response(
     :returns tuple (<Flask Response>, <int>)
     """
 
-    if type(data) is not dict and data is not None:
-        raise TypeError("data must be a dictionary!")
+    # if type(data) is not dict and data is not None:
+    # raise TypeError("data must be a dictionary!")
 
     response = {"success": 200 <= status < 300, "message": message, "result": data}
     return jsonify(response), status
@@ -74,4 +59,3 @@ def get_database_url(file: str = "credentials.config") -> str:
             print("Failed to retrieve MySQL credentials from [{}].".format(file))
     except:
         print("Failed to load config file [{}].".format(file))
-
