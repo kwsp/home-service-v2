@@ -13,37 +13,10 @@ chartColors = {
 const serverNames = ['TigerPi', 'TigerPi4', 'TigerPiZeroW']
 const tempNames = []
 
-// function get_sensor_temp() {
-//   let url = "/home_api/sensor_temp";
-//   $.ajax({
-//     url: url,
-//     type: 'GET',
-//     async: true,
-//     data: {n: 300},
-//     success: (sensorData) => {
-//       datasets = []
-
-//       // Update cards
-//       var len = sensorData.timestamp.length-1;
-//       var str = sensorData.temperature[len] + " C"
-//       document.getElementById('temperatureStatus').innerHTML = str;
-//       var str = sensorData.activity[len];
-//       document.getElementById('activityStatus').innerHTML = str;
-
-//       sensorData.timestamp.forEach(function(part, index, arr) {
-//         arr[index] = moment.unix(part);
-//       })
-
-//       // Update plots
-//       areaPlot('graphTemperature', sensorData.timestamp, sensorData.temperature, 'Temperature (°C)')
-//       areaPlot('graphActivity', sensorData.timestamp, sensorData.activity, 'Activity (count)')
-//     }
-//   })
-// }
 
 function updateCard() {
   $.ajax({
-    url: 'home_api/sensor_temp',
+    url: 'home_api/room_temp',
     type: 'GET',
     async: true,
     data: {names: 'bedroom', n: 1},
@@ -53,7 +26,7 @@ function updateCard() {
   })
 
   $.ajax({
-    url: 'home_api/sensor_humidity',
+    url: 'home_api/room_humidity',
     type: 'GET',
     async: true,
     data: {names: 'laundry_closet', n: 1},
@@ -71,14 +44,21 @@ function getPlotDataFromURL(url, data, plotname, yLabel, colourSeed) {
     async: true,
     data: null,
     success: (returnJSON) => {
+
+      traces = {}
+      returnJSON["result"].forEach(function (v, i) {
+        if (v.name in traces) {
+            traces[v.name].push({x: moment(v.time), y: v.value})
+        } else {
+            traces[v.name] = [];
+        }
+      });
+      
       datasets = []
-      Object.keys(returnJSON).forEach(function (v, i) {
-        returnJSON[v].forEach(function (part, index, arr) {
-          arr[index].x = moment.unix(arr[index].x);
-        });
+      Object.keys(traces).forEach(function (v, i) {
         datasets.push({
           label: v,
-          data: returnJSON[v],
+          data: traces[v],
           borderColor: chartColors[Object.keys(chartColors)[i+colourSeed]],
           showLine: true,
           pointRadius: 0,
@@ -110,28 +90,28 @@ function get_language() {
 
 $(function() {
   "use strict";
-  updateCard()
   getPlotDataFromURL(
-    "home_api/pi_temp",
+    "home_api/server_temp",
     null,
     'graphPiTemp',
     'Temperature (°C)',
     0
   )
   getPlotDataFromURL(
-    "home_api/sensor_temp",
+    "home_api/room_temp",
     {n: 300},
     'graphTemperature',
     'Temperature (°C)',
     0
   )
   getPlotDataFromURL(
-    "home_api/sensor_humidity",
+    "home_api/room_humidity",
     null,
     'graphHumidity',
     'Humidity (%)',
     2
   )
 
+  //updateCard()
   get_language();
 })

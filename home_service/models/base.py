@@ -20,4 +20,7 @@ class Mixin:
         d_out = dict((key, val) for key, val in self.__dict__.items())
         d_out.pop("_sa_instance_state", None)
         d_out["_id"] = d_out.pop("id", None)  # rename id key to interface with response
+        if "time" in d_out:
+            d_out["time"] = d_out["time"].isoformat()
+
         return d_out
