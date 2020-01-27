@@ -73,7 +73,7 @@ def RoomTemp_get():
 
 @sensor_blueprint.route("/home_api/room_temp", methods=["POST"])
 def RoomTemp_post():
-    return _sensor_data_post(RoomTemp, json.loads(request.data))
+    return _sensor_data_post(RoomTemp, request.values)
 
 
 @sensor_blueprint.route("/home_api/room_humidity", methods=["GET"])
@@ -83,7 +83,7 @@ def RoomHumidity_get():
 
 @sensor_blueprint.route("/home_api/room_humidity", methods=["POST"])
 def RoomHumidity_post():
-    return _sensor_data_post(RoomHumidity, json.loads(request.data))
+    return _sensor_data_post(RoomHumidity, request.values)
 
 
 @sensor_blueprint.route("/home_api/server_temp", methods=["GET"])
@@ -93,7 +93,7 @@ def ServerTemp_get():
 
 @sensor_blueprint.route("/home_api/server_temp", methods=["POST"])
 def ServerTemp_post():
-    return _sensor_data_post(ServerTemp, json.loads(request.data))
+    return _sensor_data_post(ServerTemp, request.values)
 
 
 # @sensor_blueprint.route("/home_api/gitpull", methods=["GET"])
