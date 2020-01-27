@@ -46,7 +46,7 @@ def _sensor_data_get(Table, args):
     if "end" in args:
         end_date = request.args["end"]
 
-    # qry = qry.filter(begin_date < Table.time).filter(Table.time < end_date)
+    qry = qry.filter(begin_date < Table.time).filter(Table.time < end_date)
     res = [v.to_dict() for v in qry.all()]
 
     return create_response(data=res)

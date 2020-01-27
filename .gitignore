@@ -4,8 +4,7 @@
 
 venv/
 flask/
-service/data/*.db
+home_service/data/*.db
 
 .coverage
 
-tags

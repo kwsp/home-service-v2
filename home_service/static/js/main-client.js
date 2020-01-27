@@ -53,6 +53,16 @@ function getPlotDataFromURL(url, data, plotname, yLabel, colourSeed) {
             traces[v.name] = [];
         }
       });
+
+      if ("bedroom" in traces) {
+          if (plotname.search("Humidity") >= 0) {
+              document.getElementById('humidityStatus').innerHTML = traces.bedroom[0].y + '%';
+          } else if (plotname.search("Temperature") >=0) {
+              document.getElementById('temperatureStatus').innerHTML = traces.bedroom[0].y + 'C';
+          }
+
+      }
+
       
       datasets = []
       Object.keys(traces).forEach(function (v, i) {
@@ -93,16 +103,16 @@ $(function() {
   getPlotDataFromURL(
     "home_api/server_temp",
     null,
-    'graphPiTemp',
+    'graphServerTemp',
     'Temperature (°C)',
     0
   )
   getPlotDataFromURL(
     "home_api/room_temp",
-    {n: 300},
+    null,
     'graphTemperature',
     'Temperature (°C)',
-    0
+    0,
   )
   getPlotDataFromURL(
     "home_api/room_humidity",
