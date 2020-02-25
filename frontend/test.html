@@ -1,0 +1,15 @@
+
+<html>
+
+    <body>
+
+    <script>
+function fetchHomeAPI(url) {
+    fetch(url).then(res => res.json()).then((response) => {
+        return response;
+    })
+}
+
+console.log(fetchHomeAPI("http://127.0.0.1:6969"))
+
+    </script>

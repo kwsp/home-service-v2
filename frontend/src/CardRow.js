@@ -4,21 +4,38 @@ import Col from 'react-bootstrap/Col';
 
 import CustomCard from './card';
 
+
+
 class TimeCard extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {time: new Date().toLocaleTimeString()};
+    }
 
     componentDidMount() {
-      this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000);
+        this.timerID = setInterval(
+            () => this.tick(), 
+            1000
+        );
     }
+
     componentWillUnmount() {
-      clearInterval(this.interval);
+        clearInterval(this.timerID);
+    }
+
+    tick() {
+        this.setState({
+            time: new Date().toLocaleTimeString()
+        })
     }
 
     render() {
-        return (
-            <CustomCard title="Time" text="bla bla"/>
-        )
+      return (
+          <CustomCard title="Time" text={this.state.time} />
+      );
     }
 }
+
 
 
 

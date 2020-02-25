@@ -25,6 +25,9 @@ def create_app():
     elif env == "testing":
         app.config.from_object(TestingConfig)
 
+    # CORS
+    CORS(app)
+
     # Register Database
     db.init_app(app)
 
