@@ -53,7 +53,7 @@ function getPlotDataFromURL(url, data, plotname, yLabel, colourSeed) {
         }
       });
 
-      if ("bedroom" in traces) {
+      if ("bedroom" in traces && traces.bedroom.length > 0) {
         if (plotname.search("Humidity") >= 0) {
           document.getElementById("humidityStatus").innerHTML =
             traces.bedroom[0].y + "%";

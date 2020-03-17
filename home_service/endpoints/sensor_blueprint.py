@@ -21,7 +21,6 @@ import datetime
 from flask import jsonify, Blueprint, request
 
 from home_service.core import create_response
-from home_service.get_db import get_db, execute_db
 from home_service.models import db, ServerTemp, RoomTemp, RoomHumidity
 
 

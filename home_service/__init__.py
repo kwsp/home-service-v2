@@ -1,9 +1,10 @@
+import os
+
 from flask import Flask, jsonify
 from flask import make_response, render_template
-from flask_migrate import Migrate
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from home_service.config import DevelopmentConfig
+from home_service.config import DevelopmentConfig, ProductionConfig, TestingConfig
 from home_service.core import exception_handler, create_response
 from home_service.models.base import db
 from home_service.endpoints import sensor_blueprint
@@ -15,12 +16,20 @@ def create_app():
     app = Flask(__name__, instance_relative_config=True)
 
     # Set config
-    app.config.from_object(DevelopmentConfig)
+    env = os.environ.get("FLASK_ENV", "development")
+
+    if env == "development":
+        app.config.from_object(DevelopmentConfig)
+    elif env == "production":
+        app.config.from_object(ProductionConfig)
+    elif env == "testing":
+        app.config.from_object(TestingConfig)
 
     # Register Database
-    # db.metadata.clear()
     db.init_app(app)
-    migrate = Migrate(app, db)
+
+    with app.app_context():
+        db.create_all()
 
     # Proxy support for NGINX
     app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -29,14 +38,11 @@ def create_app():
     def index():
         return render_template("index.html")
 
-    @app.route("/_")
-    def breakpoint():
-        breakpoint()
-        return " ", 200
+    if env == "development":
 
-    @app.route("/debug")
-    def debug():
-        return render_template("debug.html")
+        @app.route("/debug")
+        def debug():
+            return render_template("debug.html")
 
     app.register_blueprint(sensor_blueprint.sensor_blueprint)
     app.register_error_handler(Exception, exception_handler)

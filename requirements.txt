@@ -2,5 +2,4 @@ Flask>=1.1.1
 flask-sqlalchemy
 SQLAlchemy
 gunicorn>=20.0.0
-Flask-Migrate
 python-dotenv
