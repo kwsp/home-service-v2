@@ -13,10 +13,10 @@ from home_service.endpoints import sensor_blueprint
 def create_app():
 
     # Instantiate flask app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__)
 
     # Set config
-    env = os.environ.get("FLASK_ENV", "development")
+    env = os.environ.get("FLASK_ENV", "production")
 
     if env == "development":
         app.config.from_object(DevelopmentConfig)

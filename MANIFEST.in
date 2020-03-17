@@ -1,0 +1,3 @@
+graft home_service/static
+graft home_service/templates
+global-exclude *.pyc
