@@ -3,6 +3,11 @@ def test_index(client):
     assert res.status_code == 200
 
 
+def test_debug(client_notest):
+    res = client_notest.get("/debug")
+    assert res.status_code == 200
+
+
 def test_room_temp(client):
     res = client.get("/home_api/room_temp")
     assert res.status_code == 200
