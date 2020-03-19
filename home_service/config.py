@@ -11,13 +11,9 @@ def get_database_path() -> str:
     data_dir = os.path.join(os.environ["HOME"], ".home_service")
     try:
         os.makedirs(data_dir)
-    except OSError:
+    except OSError:  # pragma: no cover
         pass
     return os.path.join(data_dir, "home_service.db")
-
-
-def load_testing_db():
-    data_dir = "data/schema.sql"
 
 
 class Config:

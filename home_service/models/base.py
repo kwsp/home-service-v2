@@ -9,12 +9,12 @@ class Mixin:
     """Base class for sensor value tables
     """
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return "<{!r}: {!r}, {!r}, {!r}>".format(
             self.__tablename__, self.name, self.time, self.value
         )
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict:  # pragma: no cover
         """Method to serialise SQLAlchemy response for JSON
 
         :returns <dict>
@@ -36,7 +36,7 @@ def init_test_db():
     try:
         with open("data/sample.sql") as f:
             data = f.read()
-    except FileNotFoundError:
+    except FileNotFoundError:  # pragma: no cover
         sys.exit("Sample SQL file not found.")
 
     c = db.engine.raw_connection().cursor()

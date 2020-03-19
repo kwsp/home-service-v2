@@ -11,3 +11,6 @@ class RoomTemp(Mixin, db.Model):
     name = db.Column(db.VARCHAR, nullable=False)
     time = db.Column(db.DateTime, nullable=False)
     value = db.Column(db.REAL, nullable=False)
+
+    def __repr__(self):  # pragma: no cover
+        return "<RoomTemp {!r}, {!r}, {!r}>".format(self.name, self.time, self.value)

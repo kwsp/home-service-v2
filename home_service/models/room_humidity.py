@@ -12,7 +12,7 @@ class RoomHumidity(Mixin, db.Model):
     time = db.Column(db.DateTime, nullable=False)
     value = db.Column(db.REAL, nullable=False)
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return "<RoomHumidity {!r}, {!r}, {!r}>".format(
             self.name, self.time, self.value
         )

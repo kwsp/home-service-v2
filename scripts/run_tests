@@ -1,4 +1,9 @@
 #!/bin/bash
 coverage run -m pytest -v
 coverage report
-coverage html
+if [ "${CI}" ]
+then
+    coverage xml
+else
+    coverage html
+fi
