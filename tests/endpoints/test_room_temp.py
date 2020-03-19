@@ -29,3 +29,6 @@ class TestRoomTemp:
         res = client.get(self.url + "?begin={}".format(time.time() + 1000))
         assert res.status_code == 200
         assert len(res.json["result"]) == 0
+
+        res = client.get(self.url + "?end={}".format(0))
+        assert len(res.json["result"]) == 0

@@ -23,7 +23,7 @@ def create_app(testing=False):
     else:
         if env == "development":
             app.config.from_object(DevelopmentConfig())
-        elif env == "production":
+        elif env == "production":  # pragma no cover
             app.config.from_object(ProductionConfig())
 
     # Register Database
