@@ -1,9 +1,9 @@
 def test_post(client):
-    url = "/home_api/room_humidity"
+    url = "/home_api/server_temp"
     res = client.post(url)
     assert res.status_code != 200  # This should fail
 
-    data = {"name": "pytest", "value": -1}
+    data = {"name": "pytest", "value": 30}
     res = client.post(url, json=data)
     assert res.status_code == 200
 
@@ -13,7 +13,7 @@ def test_post(client):
 
 
 def test_get(client):
-    url = "/home_api/room_humidity"
+    url = "/home_api/server_temp"
     res = client.get(url)
     assert res.status_code == 200
 

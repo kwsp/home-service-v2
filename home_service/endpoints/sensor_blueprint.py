@@ -39,11 +39,11 @@ def _sensor_data_get(Table, args):
     end_date = datetime.datetime.now()
     begin_date = end_date - datetime.timedelta(days=1)
 
-    ## Need to test how to send this from JS
     if "begin" in args:
-        begin_date = request.args["begin"]
+        begin_date = datetime.datetime.fromtimestamp(float(request.args["begin"]))
+
     if "end" in args:
-        end_date = request.args["end"]
+        end_date = datetime.datetime.fromtimestamp(float(request.args["end"]))
 
     qry = qry.filter(begin_date < Table.time).filter(Table.time < end_date)
     res = [v.to_dict() for v in qry.all()]
@@ -54,8 +54,13 @@ def _sensor_data_get(Table, args):
 def _sensor_data_post(Table, args):
     """Helper function to add data to the sensor tables
     """
-    if "name" not in args or "value" not in args:
+    if not args or "name" not in args or "value" not in args:
         return create_response(message="Missing arguments", status=420)
+
+    if "humidity" in Table.__tablename__ and (args["value"] > 100 or args["value"] < 0):
+        return create_response(
+            message="Invalid humidity: cannot exceed 100%", status=420
+        )
 
     new_data_pt = Table(
         name=args["name"], time=datetime.datetime.now(), value=args["value"]
@@ -72,7 +77,7 @@ def RoomTemp_get():
 
 @sensor_blueprint.route("/home_api/room_temp", methods=["POST"])
 def RoomTemp_post():
-    return _sensor_data_post(RoomTemp, request.values)
+    return _sensor_data_post(RoomTemp, request.json)
 
 
 @sensor_blueprint.route("/home_api/room_humidity", methods=["GET"])
@@ -82,7 +87,7 @@ def RoomHumidity_get():
 
 @sensor_blueprint.route("/home_api/room_humidity", methods=["POST"])
 def RoomHumidity_post():
-    return _sensor_data_post(RoomHumidity, request.values)
+    return _sensor_data_post(RoomHumidity, request.json)
 
 
 @sensor_blueprint.route("/home_api/server_temp", methods=["GET"])
@@ -92,11 +97,4 @@ def ServerTemp_get():
 
 @sensor_blueprint.route("/home_api/server_temp", methods=["POST"])
 def ServerTemp_post():
-    return _sensor_data_post(ServerTemp, request.values)
-
-
-# @sensor_blueprint.route("/home_api/gitpull", methods=["GET"])
-# def get(repo_name):
-# if repo_name == "tigernie_website":
-# res = os.popen("cd /var/www/tigernie-website && git pull").readline().strip()
-# return jsonify({"status": res})
+    return _sensor_data_post(ServerTemp, request.json)

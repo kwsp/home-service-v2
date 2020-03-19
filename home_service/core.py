@@ -38,24 +38,3 @@ def exception_handler(error: Exception) -> Tuple[Response, int]:
     :returns Tuple(<Flask Response>, <int>)
     """
     return create_response(message=str(error), status=500)
-
-
-def get_database_url(file: str = "credentials.config") -> str:
-    """Load config
-    Example of config file:
-    [mysql_creds]
-    mysql_url = mysql+pymysql://test_user:password@127.0.0.1:3306/ssd_sample_database
-
-    :param file <str> filename
-    :returns str or None if Exception
-    """
-    try:
-        config = configparser.ConfigParser()
-        config.read(file)
-        try:
-            res = config["mysql_credentials"]
-            return res["mysql_url"]
-        except KeyError:
-            print("Failed to retrieve MySQL credentials from [{}].".format(file))
-    except:
-        print("Failed to load config file [{}].".format(file))

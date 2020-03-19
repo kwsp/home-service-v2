@@ -1,3 +1,8 @@
+def test_index(client):
+    res = client.get("/")
+    assert res.status_code == 200
+
+
 def test_room_temp(client):
     res = client.get("/home_api/room_temp")
     assert res.status_code == 200

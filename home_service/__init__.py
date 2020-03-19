@@ -10,7 +10,7 @@ from home_service.models.base import db
 from home_service.endpoints import sensor_blueprint
 
 
-def create_app():
+def create_app(testing=False):
 
     # Instantiate flask app
     app = Flask(__name__)
@@ -18,12 +18,13 @@ def create_app():
     # Set config
     env = os.environ.get("FLASK_ENV", "production")
 
-    if env == "development":
-        app.config.from_object(DevelopmentConfig)
-    elif env == "production":
-        app.config.from_object(ProductionConfig)
-    elif env == "testing":
+    if testing:
         app.config.from_object(TestingConfig)
+    else:
+        if env == "development":
+            app.config.from_object(DevelopmentConfig)
+        elif env == "production":
+            app.config.from_object(ProductionConfig)
 
     # Register Database
     db.init_app(app)
@@ -45,11 +46,8 @@ def create_app():
             return render_template("debug.html")
 
     app.register_blueprint(sensor_blueprint.sensor_blueprint)
-    app.register_error_handler(Exception, exception_handler)
+
+    if not testing:
+        app.register_error_handler(Exception, exception_handler)
 
     return app
-
-
-if __name__ == "__main__":
-    app = create_app()
-    app.run(port="6969", debug=True)
