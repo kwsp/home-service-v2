@@ -1,3 +1,5 @@
+import sys
+
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -24,3 +26,19 @@ class Mixin:
             d_out["time"] = d_out["time"].isoformat()
 
         return d_out
+
+
+def init_test_db():
+    """
+    Initialise the in memory SQLite3 testing DB
+    with a sample SQL file
+    """
+    try:
+        with open("data/sample.sql") as f:
+            data = f.read()
+    except FileNotFoundError:
+        sys.exit("Sample SQL file not found.")
+
+    c = db.engine.raw_connection().cursor()
+    c.executescript(data)
+    c.close()

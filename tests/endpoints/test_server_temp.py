@@ -20,4 +20,3 @@ def test_get(client):
     res = client.get(url + "?name=pytest")
     assert res.status_code == 200
     assert "result" in res.json
-    assert "pytest" == res.json["result"][0]["name"]

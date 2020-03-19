@@ -35,4 +35,12 @@ class TestHumidity:
         res = client.get(url + "?name=pytest")
         assert res.status_code == 200
         assert "result" in res.json
-        assert "pytest" == res.json["result"][0]["name"]
+
+        res = client.get(url + "?names=pytest")
+        assert res.status_code == 200
+        assert "result" in res.json
+
+    def test_get_name(self, client):
+
+        res = client.get(self.url + "?names=bedroom")
+        assert res.status_code == 200

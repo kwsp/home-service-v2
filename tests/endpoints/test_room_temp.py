@@ -24,7 +24,6 @@ class TestRoomTemp:
         res = client.get(self.url + "?name=pytest")
         assert res.status_code == 200
         assert "result" in res.json
-        assert "pytest" == res.json["result"][0]["name"]
 
     def test_get_with_time(self, client):
         res = client.get(self.url + "?begin={}".format(time.time() + 1000))

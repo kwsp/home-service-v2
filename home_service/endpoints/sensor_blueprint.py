@@ -19,6 +19,7 @@ import time
 import json
 import datetime
 from flask import jsonify, Blueprint, request
+from sqlalchemy import func
 
 from home_service.core import create_response
 from home_service.models import db, ServerTemp, RoomTemp, RoomHumidity
@@ -34,7 +35,7 @@ def _sensor_data_get(Table, args):
     qry = Table.query.order_by(Table.time.desc())
 
     if "names" in args:
-        qry = qry.filter(Table.name.in_(request.args["names"]))
+        qry = qry.filter(func.lower(Table.name).in_([v.lower() for v in args["names"]]))
 
     end_date = datetime.datetime.now()
     begin_date = end_date - datetime.timedelta(days=1)

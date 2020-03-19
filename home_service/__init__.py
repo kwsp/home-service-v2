@@ -6,7 +6,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 
 from home_service.config import DevelopmentConfig, ProductionConfig, TestingConfig
 from home_service.core import exception_handler, create_response
-from home_service.models.base import db
+from home_service.models.base import db, init_test_db
 from home_service.endpoints import sensor_blueprint
 
 
@@ -19,34 +19,35 @@ def create_app(testing=False):
     env = os.environ.get("FLASK_ENV", "development")
 
     if testing:
-        app.config.from_object(TestingConfig)
+        app.config.from_object(TestingConfig())
     else:
         if env == "development":
-            app.config.from_object(DevelopmentConfig)
+            app.config.from_object(DevelopmentConfig())
         elif env == "production":
-            app.config.from_object(ProductionConfig)
+            app.config.from_object(ProductionConfig())
 
     # Register Database
     db.init_app(app)
 
+    # Initialise Database
     with app.app_context():
-        db.create_all()
+        if testing:
+            init_test_db()
+        else:
+            db.create_all()
 
     # Proxy support for NGINX
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
+    # Dashboard page
     @app.route("/")
     def index():
         return render_template("index.html")
 
-    if env == "development":
-
-        @app.route("/debug")
-        def debug():
-            return render_template("debug.html")
-
+    # Register blueprints
     app.register_blueprint(sensor_blueprint.sensor_blueprint)
 
+    # Register error handler
     if not testing:
         app.register_error_handler(Exception, exception_handler)
 

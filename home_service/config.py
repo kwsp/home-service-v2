@@ -1,6 +1,7 @@
 from base64 import b64encode
-import os
 import configparser
+import os
+import sqlite3
 
 
 def get_database_path() -> str:
@@ -15,6 +16,10 @@ def get_database_path() -> str:
     return os.path.join(data_dir, "home_service.db")
 
 
+def load_testing_db():
+    data_dir = "data/schema.sql"
+
+
 class Config:
     """Base config
     """
@@ -24,7 +29,8 @@ class Config:
     SECRET_KEY = b64encode(os.urandom(16)).decode()
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = "sqlite:///data/home_service.db"
+    # SQLALCHEMY_DATABASE_URI = "sqlite:///data/home_service.db"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
 
 
 class DevelopmentConfig(Config):
