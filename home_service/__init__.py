@@ -16,7 +16,7 @@ def create_app(testing=False):
     app = Flask(__name__)
 
     # Set config
-    env = os.environ.get("FLASK_ENV", "production")
+    env = os.environ.get("FLASK_ENV", "development")
 
     if testing:
         app.config.from_object(TestingConfig)
