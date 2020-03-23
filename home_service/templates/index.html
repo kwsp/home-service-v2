@@ -39,6 +39,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
 <link rel="shortcut icon" href="/static/favicon.ico">
+<link rel="manifest" href="/static/site.webmanifest">
 <!-- Custom fonts for this template-->
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 <!-- Custom bootstrap styles for this template-->
@@ -193,7 +194,7 @@
                 </div>
               </div>
             </div>
-              
+
             <!-- Humidity Chart -->
             <div class="col-lg-6">
               <div class="card mb-4" id="humidityPlot">
@@ -223,23 +224,23 @@
                 <div class="card-body">
                   <p>
                     This projects is motivated by my fascination with IoT electronics
-                    and my desire to monitor the status of my apartment 24/7.   
+                    and my desire to monitor the status of my apartment 24/7.
                     It was incredibly fun to put all this together as it required such a diverse set of
-                    tools (fullstack, database, microcontrollers and sensors). 
-                    You are looking at the dashboard for my IoT devices hosted on a RaspberryPi, 
-                    including a thermister to monitor temperature and 
-                    an accelerometer to monitor activity (which, as you'd imagine, 
-                    is basically a very good random number generator). 
+                    tools (fullstack, database, microcontrollers and sensors).
+                    You are looking at the dashboard for my IoT devices hosted on a RaspberryPi,
+                    including a thermister to monitor temperature and
+                    an accelerometer to monitor activity (which, as you'd imagine,
+                    is basically a very good random number generator).
                   </p>
                   <p class="mb-0">
-                    The front end is built with <a href="https://getbootstrap.com">Bootstrap</a> and 
-                    <a href="https://jquery.com">jQuery</a> based on the 
-                    <a href="https://github.com/tiega/startbootstrap-sb-admin-2">SB Admin 2</a> 
+                    The front end is built with <a href="https://getbootstrap.com">Bootstrap</a> and
+                    <a href="https://jquery.com">jQuery</a> based on the
+                    <a href="https://github.com/tiega/startbootstrap-sb-admin-2">SB Admin 2</a>
                     theme. The backend is built with <a href="https://flask.palletsprojects.com/en/1.1.x/">Flask</a>
-                    , while data is stored in a <a href="https://www.sqlite.org">SQLite</a> database. The server is hosted with 
+                    , while data is stored in a <a href="https://www.sqlite.org">SQLite</a> database. The server is hosted with
                     <a href="https://www.nginx.com">NGINX</a> on a <a href="https://www.raspberrypi.org/">
-                       Raspberry Pi 3B+</a> in my bedroom, which also controls the sensors through an 
-                    <a href="">Arduino</a>. In the future I will implement 
+                       Raspberry Pi 3B+</a> in my bedroom, which also controls the sensors through an
+                    <a href="">Arduino</a>. In the future I will implement
                     the <a href="http://mqtt.org/">MQTT protocol</a> to communicate with multiple IoT devices. </p>
                 </div>
               </div>
@@ -291,10 +292,10 @@
   <script type="text/javascript">
     $("div.currentDate").html(moment(new Date()).format('MMMM DD, YYYY'));
     $("#updateTime").html((new Date()).toLocaleTimeString());
-    
+
     setInterval(function() {
     $("#updateTime").html((new Date()).toLocaleTimeString());}, 1000);
-  
+
     // Update progress bar
     var scale = 17.7;
     var progress = 13.7/17.7;
