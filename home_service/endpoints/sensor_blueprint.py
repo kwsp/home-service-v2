@@ -58,13 +58,16 @@ def _sensor_data_post(Table, args):
     if not args or "name" not in args or "value" not in args:
         return create_response(message="Missing arguments", status=420)
 
-    if "humidity" in Table.__tablename__ and (args["value"] > 100 or args["value"] < 0):
+    name = args["name"]
+    value = round(args["value"], 2)  # round to 2 decimal places
+
+    if "humidity" in Table.__tablename__ and (value > 100 or value < 0):
         return create_response(
             message="Invalid humidity: cannot exceed 100%", status=420
         )
 
     new_data_pt = Table(
-        name=args["name"], time=datetime.datetime.now(), value=args["value"]
+        name=args["name"], time=datetime.datetime.now(), value=value
     )
     db.session.add(new_data_pt)
     db.session.commit()
