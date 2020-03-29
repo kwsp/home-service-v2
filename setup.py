@@ -16,6 +16,7 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
+long_description = read("README.md")
 requirements = read("requirements.txt").split("\n")
 requirements_dev = read("requirements-dev.txt").split("\n")
 extras = {"dev": requirements_dev}
@@ -23,7 +24,9 @@ extras = {"dev": requirements_dev}
 setup(
     name="home_service",
     version=find_version("home_service/__init__.py"),
-    description="",
+    description="A simple home monitoring system",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/tiega/home-service-v2",
     author="Tiger Nie",
     author_email="nhl0819@gmail.com",
@@ -31,6 +34,13 @@ setup(
     maintainer_email="nhl0819@gmail.com",
     license="MIT",
     packages=["home_service"],
+    python_requires=">=3.6",
+    classifiers=[
+        "License :: OSI Approved :: MIT License",
+        "Development Status :: 3 - Alpha",
+        "Framework :: Flask",
+        "Operating System :: OS Independent",
+    ],
     include_package_data=True,
     zip_safe=False,
     install_requires=requirements,

@@ -8,3 +8,7 @@ setup:
 
 test:
 	./scripts/run_tests
+
+.PHONY: build
+build:
+	python3 setup.py sdist bdist_wheel
