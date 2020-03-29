@@ -1,3 +1,7 @@
+"""
+Legacy script that migrates the base64 encoded text database
+to a SQLite3 database
+"""
 import glob
 import struct
 import binascii

@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 import re
 
@@ -33,8 +33,9 @@ setup(
     maintainer="Tiger Nie",
     maintainer_email="nhl0819@gmail.com",
     license="MIT",
-    packages=["home_service"],
+    packages=find_packages(),
     python_requires=">=3.6",
+    scripts=["scripts/home-service"],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Development Status :: 3 - Alpha",

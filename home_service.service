@@ -1,0 +1,15 @@
+[Unit]
+Description=Home Service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+WorkingDirectory=/var/www/home-service-v2/
+ExecStart=/var/www/home-service-v2/deploy.sh
+
+[Install]
+WantedBy=multi-user.target

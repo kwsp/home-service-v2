@@ -1,3 +1,6 @@
+"""
+Legacy script that inspects the old base64 text encoded database
+"""
 import glob
 import struct
 import binascii
