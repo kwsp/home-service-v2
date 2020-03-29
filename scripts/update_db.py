@@ -9,12 +9,12 @@ connection = db()
 c = connection.cursor()
 
 # Get data through Serial
-raw = getData().split(',')
+raw = getData().split(",")
 temperature = raw[0]
 activity = raw[1]
 
 # Write to DB
 record = (int(time.time()), round(float(temperature), 2), int(activity))
-c.execute('INSERT INTO sensor_data VALUES (?,?,?)', record)
+c.execute("INSERT INTO sensor_data VALUES (?,?,?)", record)
 connection.commit()
 connection.close()

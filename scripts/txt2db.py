@@ -7,8 +7,9 @@ import os
 import sys
 
 # Safety check
-res = input("This script should only be run once to" +
-            "convert txt to db. Proceed? (Y/[N]) ")
+res = input(
+    "This script should only be run once to" + "convert txt to db. Proceed? (Y/[N]) "
+)
 if res == "" or res == "N" or res == "n":
     sys.exit()
 
@@ -21,39 +22,39 @@ def unpack(fmat, data, index):
 
 # Get DB path
 db_name = "tiger-home.db"
-db_path = os.path.join(os.getcwd(),
-                       'data',
-                       db_name)
+db_path = os.path.join(os.getcwd(), "data", db_name)
 
 # Create the DB
 connection = sqlite3.connect(db_path)
 c = connection.cursor()
 
-c.execute('''CREATE TABLE sensor_data
-             (timestamp integer, temperature real, activity integer)''')
+c.execute(
+    """CREATE TABLE sensor_data
+             (timestamp integer, temperature real, activity integer)"""
+)
 
 c.execute("SELECT * FROM sensor_data")
 temp = c.fetchall()
 print("[BEFORE] DB has {} entries".format(len(temp)))
 
 # Get .txt files
-files = glob.glob('data/*.txt')
+files = glob.glob("data/*.txt")
 files.sort()
 
 
 for inFileName in files:
-    inFile = open(inFileName, 'rb')
+    inFile = open(inFileName, "rb")
 
     # Batch insert
     records = []
     for i, line in enumerate(inFile):
         data = binascii.a2b_base64(line)
         idx = 0
-        idx, (time, temp, acti) = unpack('<IfI', data, idx)
+        idx, (time, temp, acti) = unpack("<IfI", data, idx)
 
         records.append((time, round(temp, 2), acti))
 
-    c.executemany('INSERT INTO sensor_data VALUES (?,?,?)', records)
+    c.executemany("INSERT INTO sensor_data VALUES (?,?,?)", records)
 
 connection.commit()
 

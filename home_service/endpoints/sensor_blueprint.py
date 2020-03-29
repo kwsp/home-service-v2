@@ -66,9 +66,7 @@ def _sensor_data_post(Table, args):
             message="Invalid humidity: cannot exceed 100%", status=420
         )
 
-    new_data_pt = Table(
-        name=args["name"], time=datetime.datetime.now(), value=value
-    )
+    new_data_pt = Table(name=args["name"], time=datetime.datetime.now(), value=value)
     db.session.add(new_data_pt)
     db.session.commit()
     return create_response(message="Successfully posted")
