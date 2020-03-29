@@ -12,3 +12,10 @@ test:
 .PHONY: build
 build:
 	python3 setup.py sdist bdist_wheel
+
+.PHONY: clean
+clean:
+	rm -rf dist build *egg-info
+
+upload:
+	twine upload dist/*
