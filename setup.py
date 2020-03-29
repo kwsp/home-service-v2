@@ -1,22 +1,28 @@
-from setuptools import find_packages, setup
+from setuptools import setup
+import os
+import re
 
 
-version = {}
-with open("home_service/__version__.py") as fp:
-    exec(fp.read(), version)
+def read(path):
+    with open(path, "r") as fp:
+        return fp.read()
 
 
-with open("requirements.txt") as f:
-    requirements = f.read().split("\n")
+def find_version(*file_paths):
+    version_file = read(*file_paths)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
 
-with open("requirements-dev.txt") as f:
-    requirements_dev = f.read().split("\n")
 
+requirements = read("requirements.txt").split("\n")
+requirements_dev = read("requirements-dev.txt").split("\n")
 extras = {"dev": requirements_dev}
 
 setup(
     name="home_service",
-    version=version["__version__"],
+    version=find_version("home_service/__init__.py"),
     description="",
     url="https://github.com/tiega/home-service-v2",
     author="Tiger Nie",
@@ -24,9 +30,9 @@ setup(
     maintainer="Tiger Nie",
     maintainer_email="nhl0819@gmail.com",
     license="MIT",
-    packages=find_packages(),
+    packages=["home_service"],
     include_package_data=True,
     zip_safe=False,
     install_requires=requirements,
-    extra_requires=extras,
+    extras_require=extras,
 )
