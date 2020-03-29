@@ -35,7 +35,7 @@ setup(
     license="MIT",
     packages=find_packages(),
     python_requires=">=3.6",
-    scripts=["scripts/home-service"],
+    scripts=["bin/home-service", "scripts/"],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Development Status :: 3 - Alpha",

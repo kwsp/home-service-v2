@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+port=6613
+
+deploy() {
+    export FLASK_ENV=production
+    echo Running Home Service on port $port
+    gunicorn -w 2 --bind=0.0.0.0:$port "home_service:create_app()"
+}
+
+
+usage() { printf "%s" "\
+Home service is a simple IoT server that serves REST endpoints for
+IoT devices to post sensor data, and a simple web interface for monitoring.
+
+Usage: home-service [options]
+
+Options:
+    --version, -v      Get version info and exit
+    --help, -h         Print this message and exit
+
+    --port, -p         TCP port to run the server, defaults to port 6613
+"
+exit 1
+}
+
+get_version() {
+    version=$(python3 -c "import home_service; print(home_service.__version__)")
+    echo $version
+    exit 1
+}
+
+get_args() {
+    while [[ "$1" ]]; do
+        case $1 in
+            "--version" | "-v") get_version ;;
+            "--help" | "-h") usage ;;
+            "--port" | "-p")
+                port="$2"
+                shift
+            ;;
+            *)
+                echo Error: Argument \"$1\" not recognised.
+                echo
+                usage
+
+        esac
+
+        shift
+    done
+}
+
+main() {
+    get_args "$@"
+
+    deploy
+}
+
+main "$@"

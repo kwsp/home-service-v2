@@ -1,5 +1,4 @@
-"""
-Prints the latest data from home service's sqlite3 database
+""" Prints the latest data from home service's sqlite3 database
 
 A path to the database file can be provided as a parameter,
 else it will use the default location "~/.home_service/home_service.db"
