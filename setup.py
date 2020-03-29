@@ -8,8 +8,8 @@ def read(path):
         return fp.read()
 
 
-def find_version(*file_paths):
-    version_file = read(*file_paths)
+def find_version(file_paths):
+    version_file = read(file_paths)
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
     if version_match:
         return version_match.group(1)
@@ -35,7 +35,7 @@ setup(
     license="MIT",
     packages=find_packages(),
     python_requires=">=3.6",
-    scripts=["bin/home-service", "scripts/"],
+    scripts=["bin/home-service"],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Development Status :: 3 - Alpha",
