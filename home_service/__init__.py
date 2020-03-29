@@ -1,3 +1,2 @@
 from home_service.app import create_app
-
-__version__ = "0.2.0"
+from __version__ import __version__

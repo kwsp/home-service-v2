@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 
 version = {}
-with open("home_service/__init__.py") as fp:
+with open("home_service/__version__.py") as fp:
     exec(fp.read(), version)
 
 
