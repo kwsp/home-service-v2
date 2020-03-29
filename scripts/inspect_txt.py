@@ -9,13 +9,14 @@ def unpack(fmat, data, index):
     index += struct.Struct(fmat).size
     return idx, unpackedStuff
 
-files = glob.glob('../data/*.txt')
+
+files = glob.glob("../data/*.txt")
 
 files.sort()
 breakpoint()
 
 inFileName = files[5]
-inFile = open(inFileName, 'rb')
+inFile = open(inFileName, "rb")
 
 timestamp = []
 datetime_ = []
@@ -26,7 +27,7 @@ for i, line in enumerate(inFile):
     data = binascii.a2b_base64(line)
 
     idx = 0
-    idx, (time, temp, acti) = unpack('<IfI', data, idx)
+    idx, (time, temp, acti) = unpack("<IfI", data, idx)
     timestamp.append(time)
     datetime_.append(datetime.fromtimestamp(time))
     temperature.append(temp)
